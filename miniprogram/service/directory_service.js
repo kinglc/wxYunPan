@@ -1,3 +1,11 @@
+  /**
+   * @typedef fileType
+   * @property {string} _id - 文件ID 
+   * @property {date} createTime - 文件创建时间
+   * @property {string} filename - 文件名
+   * @property {string} cloudpath - 文件云文件ID
+   */
+
 /**
  * 生成UUID
  * @return {string} 生成的UUID
@@ -50,6 +58,13 @@ function getSuffix(filename){
   return filename.substr(dotIndex)
 }
 
+/**
+ * 提供用户私有目录服务
+ * fetch 拉取更多目录数据
+ * upload 上传文件
+ * rename 重命名文件
+ * remove 移除文件
+ */
 export default class DirectoryService{
   constructor(){
     wx.cloud.init();
@@ -72,7 +87,7 @@ export default class DirectoryService{
    * @param {Object} option
    * @param {string} option.fileId 待命名的文件ID
    * @param {string} option.filename 新文件名
-   * @param {function(Array)} option.success 响应成功的回调函数，参数为更新后的文件列表
+   * @param {function(Array<fileType>)} option.success 响应成功的回调函数，参数为更新后的文件列表
    * @param {function(Object)} option.fail
    */
   rename({
@@ -105,13 +120,20 @@ export default class DirectoryService{
   /**
    * 拉取20条文件数据并入当前数组
    * @param {Object} option
-   * @param {function(Array)} option.success 响应成功的回调函数，参数为更新后的文件列表
+   * @param {function(Array<fileType>)} option.success 响应成功的回调函数，参数为更新后的文件列表
    * @param {function(Object)} option.fail
    */
   fetch({
     success = (res)=>{},
     fail = (res)=>{}
   }){
+    if(this.fetching){
+      fail({
+        errMsg:'请等待上次的查询'
+      })
+      return;
+    }
+    this.fetching = true;
     var that = this;
     let data = this.getData();
     let lastTimestamp = null;
@@ -123,23 +145,27 @@ export default class DirectoryService{
     const db = wx.cloud.database();
     const _ = db.command;
     const filedb = db.collection('file');
-    console.log(lastTimestamp)
     filedb.where({
       createTime: _.lt(lastTimestamp)
     }).orderBy('createTime','desc').get({
       success(res){
         that.data = data.concat(res.data);
         success(that.data);
+        that.fetching = false;
       },
-      fail
+      fail(res){
+        fail(res);
+        that.fetching = false;
+      }
     })
+   
   }
 
   /**
    * 用户删除自己的某项文件
    * @param {Object} option
    * @param {string} option.fileId 待删除的文件ID
-   * @param {function(Array)} option.success 响应成功的回调函数，参数为更新后的文件列表
+   * @param {function(Array<fileType>)} option.success 响应成功的回调函数，参数为更新后的文件列表
    * @param {function(Object)} option.fail
    */
   remove({
@@ -169,7 +195,7 @@ export default class DirectoryService{
    * 上传一个文件，有多个请调用多次
    * @param {Object} option
    * @param {string} option.filepath - 文件路径
-   * @param {function(Array)} option.success 响应成功的回调函数，参数为更新后的文件列表
+   * @param {function(Array<fileType>)} option.success 响应成功的回调函数，参数为更新后的文件列表
    * @param {function(Object)} option.fail 
    */
   upload({

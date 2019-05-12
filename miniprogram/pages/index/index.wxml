@@ -42,3 +42,5 @@
   </view>
 
 </view>  -->
+<van-button type="primary" bind:click="upload">upload</van-button>
+<van-button type='info' bind:click="fetch">fetch</van-button>
