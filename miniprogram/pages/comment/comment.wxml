@@ -54,7 +54,7 @@
     <van-row>
         <view style='padding-top:10px;'>
             <van-col offset="4"><text style='font-size:16px;'>评价</text></van-col>
-            <van-col offset='1'><button class='commentBtn' plain='true'>写下你的评论...</button></van-col>
+            <van-col offset='1'><button class='commentBtn' plain='true' bindtap='writeComment'>写下你的评论...</button></van-col>
         </view>
     </van-row>
 </view>
