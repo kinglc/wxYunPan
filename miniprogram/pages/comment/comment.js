@@ -1,18 +1,20 @@
 // miniprogram/pages/comment/comment.js
+import CommentService from '../../service/comment_service.js'
+const comment=new CommentService() 
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+      commentArray:[1,2,3]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+      
   },
 
   /**
@@ -62,5 +64,19 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+
+  /**
+   * 评价按钮
+   */
+  comment:function(e){
+
+  },
+
+  /**用户点击写评论按钮 */
+  writeComment:function(e){
+      wx.navigateTo({
+          url: '../writeComment/writeComment',
+      })
   }
 })
