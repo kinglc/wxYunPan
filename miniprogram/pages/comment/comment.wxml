@@ -1,2 +1,50 @@
 <!--miniprogram/pages/comment/comment.wxml-->
-<text>miniprogram/pages/comment/comment.wxml</text>
+<view class='header'>
+    <van-row>
+        <van-col><text>娃哈哈</text></van-col>
+    </van-row>
+</view>
+
+<view style='border: 1px solid #c8c8c8;'>
+    <van-row>
+        <van-col><view style='padding-top:60px;padding-left:5px;font-size:15px;color:gray;'>评价列表</view>
+        </van-col>
+        <van-col offset="4">
+            <image src='../../images/file.png' mode='aspectFit' class='file'></image>
+        </van-col>
+        <van-col offset="1">
+            <view style='padding-top:20px;'>
+            <van-row style='font-size: 20px;color: #f79414;'>
+            4.3分</van-row>
+            <van-row style='font-size:15px;color:gray;'>
+            共有3人评价</van-row>
+            </view>
+        </van-col>
+    </van-row>
+</view>
+
+<view class="comments">
+    <!-- <block wx:for="{{commentArray}}"> -->
+        <van-row>
+            <van-col>
+                <van-row>
+                    <image class="userAvatar" src='../../images/unLog.png'></image>
+                </van-row>
+                <van-row>
+                    <text class='userName'>用户1</text>
+                </van-row>
+            </van-col>
+            <van-col>
+            </van-col>
+        </van-row>
+    <!-- </block> -->
+</view>
+
+<view class='yourComment'>
+    <van-row>
+        <view style='padding-top:10px;'>
+            <van-col offset="4"><text style='font-size:16px;'>评价</text></van-col>
+            <van-col offset='1'><button class='commentBtn' plain='true'>写下你的评论...</button></van-col>
+        </view>
+    </van-row>
+</view>
