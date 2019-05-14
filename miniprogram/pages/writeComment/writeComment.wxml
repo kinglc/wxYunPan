@@ -5,7 +5,7 @@
             <text style='color:gray;'>输入标题:</text>
         </van-col>
         <van-col span="15">
-            <input value='{{inputTitle}}' maxlength='15' style='background-color:#c8c8c8;' bindfocus='titleGetFocus'></input>
+            <input value='{{inputTitle}}' maxlength='25' style='background-color:#c8c8c8;' bindfocus='titleGetFocus'></input>
         </van-col>
     </van-row>
 </view>
