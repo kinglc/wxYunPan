@@ -8,7 +8,7 @@
   color:#0ca6e9;
 }
 
-.file{
+.fileImage{
     height: 70px;
     width: 60px;
     padding-top: 5px;
@@ -18,7 +18,7 @@
 
 .comments{
     width: 100%;
-    height: 400px;
+    height: 390px;
     border: 1px solid #c8c8c8;
 }
 
@@ -38,11 +38,36 @@
 .userAvatar{
     width: 50px;
     height: 50px;
-    border: 1px solid #c8c8c8;
-    /* border-radius: 50%; */
 }
 
 .userName{
     font-size: 15px;
     color: gray;
+    padding-left: 7px;
+}
+
+.aComment{
+    width: 100%;
+    height: 130px;
+    border: 1px solid #c8c8c8;
+}
+
+.commentTitle{
+    font-size: 17px;
+}
+
+.commentContent{
+    font-size: 14px;
+    color: gray;
+}
+
+.commentScore{
+    font-size: 14px;
+    color: #f79414;
+}
+
+.commentTime{
+    font-size: 14px;
+    color: gray;
+    padding-left: 10px;
 }
