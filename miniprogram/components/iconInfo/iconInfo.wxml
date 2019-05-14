@@ -1,0 +1,5 @@
+<!--components/iconInfo/iconInfo.wxml-->
+<div class='icon-info' onclick='turn'>
+  <div class='icon'><van-icon name="{{name}}"/></div>
+  <div class='info'>{{info}}</div>
+</div>

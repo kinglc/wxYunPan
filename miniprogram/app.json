@@ -1,12 +1,12 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/choice/choice",
     "pages/comment/comment",
     "pages/history/history",
     "pages/search/search",
     "pages/share/share",
-    "pages/update/update"
+    "pages/update/update",
+    "pages/choose/choose"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -14,5 +14,12 @@
     "navigationBarBackgroundColor": "#F6F6F6",
     "navigationBarTitleText": "微信云盘",
     "navigationBarTextStyle": "black"
+  },
+  "usingComponents": {
+    "van-icon": "vant/icon/index",
+    "van-row": "vant/row/index",
+    "van-col": "vant/col/index",
+    "van-button":"vant/button/index",
+    "van-card":"vant/card/index"
   }
 }

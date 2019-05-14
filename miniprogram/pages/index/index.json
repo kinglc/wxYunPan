@@ -1,5 +1,6 @@
 {
-  "usingComponents": {
-    "van-button": "../../vant/button/index"
+ "usingComponents": {
+  "icon-info": "/components/iconInfo/iconInfo",
+  "file-list":"/components/fileList/fileList"
   }
 }

@@ -1,0 +1,17 @@
+/* components/iconInfo/iconInfo.wxss */
+.icon-info{
+  color:#A29F9F;
+  font-size: 20px;
+  margin-top: 10px;
+}
+van-icon{
+  margin-top:5px;
+  display: flex;
+  justify-content: center;
+}
+.info{  
+  margin-top:5px;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+}

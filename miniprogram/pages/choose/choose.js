@@ -1,4 +1,4 @@
-// miniprogram/pages/choice/choice.js
+// miniprogram/pages/choose/choose.js
 Page({
 
   /**
