@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+      historyFiles:[1,2,3]
   },
 
   /**
