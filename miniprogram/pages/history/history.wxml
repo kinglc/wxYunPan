@@ -8,7 +8,7 @@
             <view style='padding-top:10px;'>
             <van-col offset="1">
                 <!-- 此处需要调后端 -->
-                <view><text>文件1</text></view>
+                <view><text style='font-size:17px;color:black;'>文件1</text></view>
                 <view><text>2019-04-29  00:00</text></view>
             </van-col>
             </view>
