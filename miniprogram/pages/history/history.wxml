@@ -1,2 +1,18 @@
-<!--miniprogram/pages/history/history.wxml-->
-<text>miniprogram/pages/history/history.wxml</text>
+<view>
+    <block wx:for="{{historyFiles}}">
+        <view class='aFile'>
+        <van-row>
+            <van-col offset="2">
+                <image src='../../images/file.png' mode='aspectFit' class='fileImage'></image>
+            </van-col>
+            <view style='padding-top:10px;'>
+            <van-col offset="1">
+                <!-- 此处需要调后端 -->
+                <view><text>文件1</text></view>
+                <view><text>2019-04-29  00:00</text></view>
+            </van-col>
+            </view>
+        </van-row>
+        </view>
+    </block>
+</view>
