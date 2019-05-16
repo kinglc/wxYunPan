@@ -1,13 +1,28 @@
-function getUserInfo({success,fail}){
-  wx.getUserInfo({
-    success(res){
-      console.log(res)
-      success({
-        avatar:res.userInfo.avatarUrl,
-        nickname:res.userInfo.nickName
-      });
-    },
-    fail
+/**
+ * @typedef ShareInfo
+ * @property {string} _id - 分享的ID
+ * @property {Array<{_id:string,filename:string}>} files - 一批文件的ID 
+ * @property {date} createTime - 文件创建时间
+ * @property {string} name - 分享名称
+ * @property {string} remark - 分享说明
+ * @property {string} nickname - 分享人
+ * @property {string} avatar - 分享人头像链接
+ * @property {number} comment - 评论数量
+ * @property {number} score - 评论分数和
+ */
+
+/**
+ * @typedef ErrorMsg
+ * @property {string} errMsg - 错误信息
+ * @property ...
+ */
+
+function getUserInfo(){
+  return new Promise((success,fail)=>{
+    wx.getUserInfo({
+      success,
+      fail
+    })
   })
 }
 
@@ -19,35 +34,58 @@ function getUserInfo({success,fail}){
  * share 一次分享
  */
 export default class ShareService {
-  constructor() {
-    this.fetching = false;
+  /**
+   * @constructor
+   * @param {Object} option
+   * @param {function(Array<ShareInfo>)} option.onShareListChange - 函数调用成功修改数据后的监听器
+   * @param {function(ErrorMsg)} option.onFail - 函数调用失败的监听器
+   */
+  constructor({
+    onShareListChange = () => { },
+    onFail = () => { }
+  }) {
+    this._setup(onShareListChange, onFail);
     wx.cloud.init();
+    this._fetching = false;
   }
+
+  _dataChanged() {
+    this.onShareListChange(this._getData())
+  }
+
+  _setup(onShareListChange, onFail) {
+    this.onShareListChange = onShareListChange;
+    this.onFail = onFail
+    return this;
+  }
+
   setFilter(filter) {
     this.filter = filter;
   }
 
-  getData() {
-    if (this.data == undefined || this.data == null) {
-      this.data = [];
+  _getData() {
+    if (this._data == undefined || this._data == null) {
+      this._data = [];
     }
-    return this.data;
+    return this._data;
   }
 
   /**
-   * 用ID获取某分享的详细数据，适用于分享给好友的情况
+   * 用ID获取某分享的详细数据，适用于分享给好友的情况，静态函数
+   * @example ShareService.getShareInfo({shareId:...,success:...,fail:...})
    * @param {Object} options
    * @param {string} options.shareId - 目标分享的ID
    * @param {function} options.success - 调用成功的回调函数
    * @param {function} options.fail - 调用失败的回调函数
    */
-  getShareInfo({
+  static getShareInfo({
     shareId,
     success,
     fail
   }){
+    wx.cloud.init();
     const db = wx.cloud.database();
-    const sharedb = db.collection('sharedb');
+    const sharedb = db.collection('share');
     sharedb.doc(shareId).get({
       success,
       fail
@@ -74,7 +112,7 @@ export default class ShareService {
     fail = ()=>{}
   }){
     if(fileIds.length > 20){
-      fail({
+      this.onFail({
         errMsg:'分享的文件数量不能大于20'
       })
       return
@@ -82,117 +120,91 @@ export default class ShareService {
     const db = wx.cloud.database();
     const _ = db.command;
     const filedb = db.collection('file');
+
+    let files = null;
+
     filedb.where({
       _id:_.in(fileIds)
-    }).get({
-      success(res){
-        getUserInfo({
-          success: function(res2) {
-            const sharedb = db.collection('share');
-
-            sharedb.add({
-              data: {
-                files: res.data.map((item)=>({
-                  _id:item._id,
-                  filename:item.filename
-                })),
-                createTime: db.serverDate(),
-                pub,
-                name,
-                remark,
-                nickname:res2.nickname,
-                avatar:res2.avatar,
-                comment:0,
-                score:0
-              },
-              success,
-              fail
-            })
-          },
-          fail
-        })
-        
-      },
-      fail
-    })
-
-
+    }).get().then(res=>{
+      files = res.data.map(item=>({
+        _id:item._id,
+        filename:item.filename
+      }));
+      return getUserInfo();
+    }).then(res=>{
+      const sharedb = db.collection('share');
+      return sharedb.add({
+        data: {
+          files: files,
+          createTime: db.serverDate(),
+          pub,
+          name,
+          remark,
+          nickname: res.userInfo.nickname,
+          avatar: res.userInfo.avatar,
+          comment: 0,
+          score: 0
+        }
+      })
+    }).then(success)
+    .catch(fail);
   }
 
 
   /**
    * 拉取20条分享数据并入当前数组
-   * @param {Object} option
-   * @param {function(Array)} option.success 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function(Object)} option.fail
    */
-  fetch({
-    success = (res) => { },
-    fail = (res) => { }
-  }) {
-    if (this.fetching == true) {
-      fail({
+  fetch() {
+    if (this._fetching == true) {
+      this.onFail({
         errMsg: '请等待上次的查询'
       })
       return;
     }
-    this.fetching = true;
-    var that = this;
-    let data = this.getData();
+    this._fetching = true;
+    let data = this._getData();
     let lastTimestamp = null;
     if (data.length != 0) {
-      lastTimestamp = data[data.length - 1].createTime;
+      lastTimestamp = new Date(data[data.length - 1].createTime);
     } else {
       lastTimestamp = new Date()
     }
     wx.cloud.callFunction({
       name:'fetchMyShare',
       data:{
-        createTime:lastTimestamp
-      },
-      success(res){
-        that.data = data.concat(res.data);
-        success(that.data);
-        that.fetching = false;
-      },
-      fail(res) {
-        fail(res);
-        that.fetching = false;
+        createTime:+lastTimestamp
       }
+    }).then(res=>{
+      this._data = this._getData().concat(res.result.data);
+      this._fetching = false;
+      this._dataChanged();
+    }).catch(res=>{
+      this._fetching = false;
+      this.onFail(res);
     })
   
   }
 
   /**
    * 用户删除自己的某项分享
-   * @param {Object} option
-   * @param {string} option.shareId 待删除的分享ID
-   * @param {function(Array)} option.success 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function(Object)} option.fail
+   * @param {string} shareId 待删除的分享ID
    */
-  remove({
-    shareId,
-    success = (res) => { },
-    fail = (res) => { }
-  }) {
+  remove(shareId) {
     const db = wx.cloud.database();
     const sharedb = db.collection('share');
-    var that = this;
-    sharedb.doc(shareId).remove({
-      success(res) {
-        let data = that.getData();
-        for (var i = 0; i < data.length; i++) {
-          if (data[i]._id == shareId) {
-            data.splice(i, 1);
-            break;
-          }
-        }
-        success(data);
-      },
-      fail
-    })
-  }
 
- 
+    sharedb.doc(shareId).remove()
+    .then(res=>{
+      let data = this._getData();
+      for (var i = 0; i < data.length; i++) {
+        if (data[i]._id == shareId) {
+          data.splice(i, 1);
+          break;
+        }
+      }
+      this._dataChanged();
+    }).catch(this.onFail)
+
+  }
 
 }

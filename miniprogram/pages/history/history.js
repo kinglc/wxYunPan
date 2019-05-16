@@ -1,18 +1,30 @@
 // miniprogram/pages/history/history.js
+import DirectoryService from '../../service/directory_service.js'
+const directory = new DirectoryService()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    files: [],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+      var that = this;
+      directory.fetch({
+        success: function (res) {
+          console.log(res);
+          that.setData({ files: res });
+        },
+        fail: function (res) {
+          console.log(res);
+          wx.showToast("获取失败，请检查网络设置");
+        }
+      });
   },
 
   /**

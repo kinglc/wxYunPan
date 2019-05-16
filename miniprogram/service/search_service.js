@@ -1,19 +1,58 @@
 /**
+ * @typedef ShareInfo
+ * @property {string} _id - 分享的ID
+ * @property {Array<{_id:string,filename:string}>} files - 一批文件的ID 
+ * @property {date} createTime - 文件创建时间
+ * @property {string} name - 分享名称
+ * @property {string} remark - 分享说明
+ * @property {string} nickname - 分享人
+ * @property {string} avatar - 分享人头像链接
+ * @property {number} comment - 评论数量
+ * @property {number} score - 评论分数和
+ */
+
+/**
+ * @typedef ErrorMsg
+ * @property {string} errMsg - 错误信息
+ * @property ...
+ */
+
+/**
  * 搜索服务，提供设置搜索关键词setFilter及拉取数据接口fetch
  */
 
 export default class SearchService {
  
-  constructor() {
-    this.fetching = false;
+  /**
+     * @constructor
+     * @param {Object} option
+     * @param {function(Array<ShareInfo>)} option.onShareListChange - 函数调用成功修改数据后的监听器
+     * @param {function(ErrorMsg)} option.onFail - 函数调用失败的监听器
+     */
+  constructor({
+    onShareListChange = () => { },
+    onFail = () => { }
+  }) {
+    this._setup(onShareListChange, onFail);
     wx.cloud.init();
+    this._fetching = false;
   }
 
-  getData() {
-    if (this.data == undefined || this.data == null) {
-      this.data = [];
+  _dataChanged() {
+    this.onShareListChange(this._getData())
+  }
+
+  _setup(onShareListChange, onFail) {
+    this.onShareListChange = onShareListChange;
+    this.onFail = onFail
+    return this;
+  }
+
+  _getData() {
+    if (this._data == undefined || this._data == null) {
+      this._data = [];
     }
-    return this.data;
+    return this._data;
   }
 
   /**
@@ -22,7 +61,7 @@ export default class SearchService {
    */
   setFilter(filter){
     this.filter = filter;
-    this.data = [];
+    this._data = [];
   }
 
   getFilter(){
@@ -35,24 +74,17 @@ export default class SearchService {
  
   /**
    * 拉取20条数据并入当前数组,会沿用上次设置的搜索关键词
-   * @param {Object} option
-   * @param {function(Array)} option.success 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function(Object)} option.fail
    */
-  fetch({
-    success = (res) => { },
-    fail = (res) => { }
-  }) {
+  fetch() {
     let filter = this.getFilter();
-    if (this.fetching == true) {
-      fail({
+    if (this._fetching == true) {
+      this.onFail({
         errMsg: '请等待上次的查询'
       })
       return;
     }
-    this.fetching = true;
-    var that = this;
-    let data = this.getData();
+    this._fetching = true;
+    let data = this._getData();
     let lastTimestamp = null;
     if (data.length != 0) {
       lastTimestamp = data[data.length - 1].createTime;
@@ -63,27 +95,25 @@ export default class SearchService {
     const db = wx.cloud.database();
     const _ = db.command;
     const sharedb = db.collection('share');
-    console.log(filter)
+
     sharedb.where({
       createTime: _.lt(lastTimestamp),
       name:{
         $regex:'.*'+filter+".*",
         $options:'i'
       }
-    }).orderBy('createTime', 'desc').get({
-      success(res) {
-        if(that.getFilter()==filter){
-          that.data = that.data.concat(res.data);
-          success(that.data);
-        }
-        that.fetching = false;
-      },
-      fail(res) {
-        fail(res);
-        that.fetching = false;
+    }).orderBy('createTime', 'desc')
+    .get()
+    .then(res => {
+      this._fetching = false;
+      if (this.getFilter() === filter) {
+        this._data = this._getData().concat(res.data);
+        this._dataChanged();
       }
-    })
-
+    }).catch(res => {
+      this._fetching = false;
+      this.onFail(res);
+    })   
   }
 
 }

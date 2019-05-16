@@ -1,10 +1,40 @@
 <!--components/fileList/fileList.wxml-->
-<view class="files">
-  <block wx:for="{{files}}">
-    <van-card
-      num="2"
-      price="2.00"
-      desc="描述信息"
-      title="商品标题" />
-  </block>
+<view class='file' bindlongpress='showPop'>
+  <van-row>
+    <van-col span="4" offset="1"><image src='../../images/file.png' mode='aspectFit'></image></van-col>
+    <van-col span="">
+      <view class='name'>{{file.filename}}</view>
+      <view class='time'>{{file.createTime}}</view>
+    </van-col>
+  </van-row>
 </view>
+
+<van-popup
+  show="{{ showPop }}"
+  position="bottom"
+  overlay="true"
+  bind:close="closePop"
+  custom-style="background-color:#00000000;"
+  close-on-click-overlay="false"
+>
+  <view class='btns'>
+    <view class='btn' bindtap = 'showRename' style='color:#1989FA;border-radius:5px 5px 0 0;'>重命名</view>
+    <view class='btn' bindtap = 'delete' style='color:red;border-radius:0 0 5px 5px;'>删除</view>
+    <view class='btn' bindtap = 'closePop'style='color:gray;margin-top:10px;border-radius:5px;'>取消</view>
+  </view>
+</van-popup>
+
+<van-dialog
+  use-slot
+  show="{{ showRename }}"
+  show-cancel-button
+  show-comfirm-button
+  bind:close="closeRename"
+  bind:confirm="rename"
+  bind:cancel="closeRename"
+>
+<view class='renamebox'>
+   <view> 重命名</view>
+   <input placeholder='请输入文件名' bindinput='input'></input>
+</view>
+</van-dialog>

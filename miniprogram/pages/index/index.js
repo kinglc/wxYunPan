@@ -4,14 +4,27 @@ const app = getApp()
 const directory = new DirectoryService()
 Page({
   data: {
-    avatarUrl: './user-unlogin.png',
+    avatarUrl: '../../images/user-unlogin.png',
     userInfo: {},
     logged: false,
     takeSession: false,
-    requestResult: ''
+    requestResult: '',
+    files:[],
   },
 
   onLoad: function () {
+    var that = this;
+    directory.fetch({
+      success: function (res) {
+        console.log(res);
+        that.setData({files:res});
+      },
+      fail: function (res) {
+        console.log(res);
+        wx.showToast("获取失败，请检查网络设置");
+      }
+    });
+
     if (!wx.cloud) {
       wx.redirectTo({
         url: '../chooseLib/chooseLib',

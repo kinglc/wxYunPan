@@ -1,10 +1,25 @@
-  /**
-   * @typedef fileType
-   * @property {string} _id - 文件ID 
-   * @property {date} createTime - 文件创建时间
-   * @property {string} filename - 文件名
-   * @property {string} cloudpath - 文件云文件ID
-   */
+/**
+ * @typedef File
+ * @property {string} _id - 文件ID 
+ * @property {date} createTime - 文件创建时间
+ * @property {boolean} isImage - 是否为图片
+ * @property {string} filename - 文件名
+ * @property {string} cloudpath - 文件云文件ID
+ * @property {number} size - 文件大小，单位字节
+ */
+
+/**
+ * @typedef ErrorMsg
+ * @property {string} errMsg - 错误信息
+ * @property ...
+ */
+
+function is_image(suffix) {
+  let regex = /^.(jpg|jpeg|png|bmp|BMP|JPG|PNG|JPEG)$/
+  return regex.test(suffix.toLowerCase());
+}
+
+
 
 /**
  * 生成UUID
@@ -59,83 +74,100 @@ function getSuffix(filename){
 }
 
 /**
- * 提供用户私有目录服务
- * fetch 拉取更多目录数据
- * upload 上传文件
- * rename 重命名文件
- * remove 移除文件
+ * 封装promise
+ */
+function getFileInfo(filePath){
+  return new Promise((resolve,reject)=>{
+    wx.getFileInfo({
+      filePath: filePath,
+      success:resolve,
+      fail:reject
+    })
+  });
+}
+/**
+ * 提供用户私有目录相关服务
+ * {@link DirectoryService~fetch} 拉取更多目录数据
+ * {@link DirectoryService~upload} 上传文件
+ * {@link DirectoryService~rename} 重命名文件
+ * {@link DirectoryService~remove} 移除文件
  */
 export default class DirectoryService{
-  constructor(){
+  /**
+   * @constructor
+   * @param {Object} option
+   * @param {function(Array<File>)} option.onFileListChange - 函数调用成功修改数据后的监听器
+   * @param {function(ErrorMsg)} option.onFail - 函数调用失败的监听器
+   */
+  constructor({
+    onFileListChange = ()=>{},
+    onFail = ()=>{}
+  }){
+    this._setup(onFileListChange,onFail);
     wx.cloud.init();
-    this.db = wx.cloud.database();
-    this.fetching = false;
+    this._fetching = false;
   }
+
+  _fileChanged() {
+    this.onFileListChange(this._getData())
+  }
+
+  _setup(onFileListChange,onFail){
+    this.onFileListChange = onFileListChange;
+    this.onFail = onFail
+    return this;
+  }
+
   setFilter(filter){
     this.filter = filter;
   }
 
-  getData() {
-    if (this.data == undefined || this.data == null) {
-      this.data = [];
+  _getData() {
+    if (this._data == undefined || this._data == null) {
+      this._data = [];
     }
-    return this.data;
+    return this._data;
   }
  
   /**
    * 用户重命名自己的某项文件
    * @param {Object} option
-   * @param {string} option.fileId 待命名的文件ID
-   * @param {string} option.filename 新文件名
-   * @param {function(Array<fileType>)} option.success 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function(Object)} option.fail
+   * @param {string} option.fileId - 待命名的文件ID
+   * @param {string} option.filename - 新文件名
    */
-  rename({
-    fileId,
-    filename,
-    success = (res)=>{},
-    fail = (res)=>{}}
-    ){
+  rename( { fileId,filename } ){
     const db = wx.cloud.database();
     const filedb = db.collection('file');
-    var that = this;
+    let isImage = is_image(getSuffix(filename));
     filedb.doc(fileId).update({
       data:{
-        filename
-      },
-      success(res) {
-        let data = that.getData();
-        for (var i = 0; i < data.length; i++) {
-          if (data[i]._id == fileId) {
-            data[i].filename=filename;
-            break;
-          }
+        filename,
+        isImage
+      }
+    }).then(res=>{
+      let data = this._getData();
+      for (var i = 0; i < data.length; i++) {
+        if (data[i]._id == fileId) {
+          data[i].filename = filename;
+          break;
         }
-        success(data);
-      },
-      fail
-    })
+      }
+      this._fileChanged();
+    }).catch(this.onFail);
   }
 
   /**
    * 拉取20条文件数据并入当前数组
-   * @param {Object} option
-   * @param {function(Array<fileType>)} option.success 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function(Object)} option.fail
    */
-  fetch({
-    success = (res)=>{},
-    fail = (res)=>{}
-  }){
-    if(this.fetching){
-      fail({
+  fetch(){
+    if(this._fetching){
+      this.onFail({
         errMsg:'请等待上次的查询'
       })
       return;
     }
-    this.fetching = true;
-    var that = this;
-    let data = this.getData();
+    this._fetching = true;
+    let data = this._getData();
     let lastTimestamp = null;
     if(data.length!=0){
       lastTimestamp = data[data.length-1].createTime;
@@ -147,99 +179,75 @@ export default class DirectoryService{
     const filedb = db.collection('file');
     filedb.where({
       createTime: _.lt(lastTimestamp)
-    }).orderBy('createTime','desc').get({
-      success(res){
-        that.data = data.concat(res.data);
-        success(that.data);
-        that.fetching = false;
-      },
-      fail(res){
-        fail(res);
-        that.fetching = false;
-      }
+    }).orderBy('createTime','desc').get()
+    .then(res=>{
+      this._data = data.concat(res.data);
+      this._fetching = false;
+      this._fileChanged();
     })
-   
+    .catch(res=>{
+      this._fetching = false;
+      this.onFail(res);
+    });
   }
 
   /**
    * 用户删除自己的某项文件
-   * @param {Object} option
-   * @param {string} option.fileId 待删除的文件ID
-   * @param {function(Array<fileType>)} option.success 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function(Object)} option.fail
+   * @param {string} fileId 待删除的文件ID
    */
-  remove({
-    fileId,
-    success = (res) => { },
-    fail = (res) => { } 
-    }){
+  remove( fileId ){
     const db = wx.cloud.database();
     const filedb = db.collection('file');
-    var that = this;
-    filedb.doc(fileId).remove({
-      success(res){
-        let data = that.getData();
-        for(var i=0;i<data.length;i++){
-          if(data[i]._id==fileId){
-            data.splice(i,1);
-            break;
-          }
+
+    filedb.doc(fileId).remove()
+    .then(res=>{
+      let data = this._getData();
+      for(var i=0;i<data.length;i++){
+        if(data[i]._id==fileId){
+          data.splice(i,1);
+          break;
         }
-        success(data);
-      },
-      fail
+      }
+      this._fileChanged();
     })
+    .catch(this.onFail)
   }
 
   /**
    * 上传一个文件，有多个请调用多次
-   * @param {Object} option
-   * @param {string} option.filepath - 文件路径
-   * @param {function(Array<fileType>)} option.success 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function(Object)} option.fail 
+   * @param {string} filePath - 文件路径
    */
-  upload({
-    filepath,
-    success = (res) => { },
-    fail = (res) => { }
-    }){
-
-    var that = this;  
+  upload(filePath){ 
 
     let suffix = getSuffix(filepath);
     let fileID = generateUUID();
 
-    wx.cloud.uploadFile({
-      // 指定上传到的云路径
-      cloudPath: fileID+suffix,
-      // 指定要上传的文件的小程序临时文件路径
-      filePath: filepath,
-      // 成功回调
-      success: res => {
-        const db = wx.cloud.database();
-        const filedb = db.collection('file');
-        const createTime = db.serverDate();
-        filedb.add({
-          data:{
-            filename:getNowFormatDate()+suffix,
-            cloudpath: fileID+suffix,
-            createTime:createTime
-          },
-          success:(res)=>{
-            filedb.doc(res._id).get({
-              success(res){
-                that.getData().unshift(res.data);
-                success(that.data);
-              },
-              fail(res){
-                console.log(res)
-              }
-            })
-          },
-          fail
-        })
-      },
-      fail
-    })
+    const db = wx.cloud.database();
+    const filedb = db.collection('file');
+
+    getFileInfo(filePath)
+    .then(res => {
+      let fileSize = res.size;
+      return wx.cloud.uploadFile({
+        cloudPath: fileID + suffix,
+        filePath: filePath
+      });
+    }).then(res=>{
+      return filedb.add({
+        data: {
+          filename: getNowFormatDate() + suffix,
+          cloudPath: res.fileID,
+          isImage:is_image(suffix),
+          createTime: db.serverDate(),
+          size: fileSize
+        }
+      })
+    }).then(res=>{
+      return filedb.doc(res._id).get();
+    }).then(res=>{
+      this._getData().unshift(res.data);
+      this._fileChanged();
+    }).
+    catch(this.onFail);
   }
 }
