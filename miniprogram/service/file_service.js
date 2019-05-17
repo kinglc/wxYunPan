@@ -82,12 +82,14 @@ export default class FileService {
    * @param {function(ErrMsg)} options.success - 失败回调 
    */
   downloadFile({cloudpath,success,fail}){
+    console.log('hhh')
+    wx.cloud.init();
     wx.cloud.downloadFile({
       fileID:cloudpath,
       success:(res)=>{
         success(res.tempFilePath);
       },
-      fail
+      fail:console.log
     })  
   }
 

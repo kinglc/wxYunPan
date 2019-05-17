@@ -1,6 +1,9 @@
 // miniprogram/pages/history/history.js
-import DirectoryService from '../../service/directory_service.js'
-const directory = new DirectoryService()
+import FileService from '../../service/file_service.js'
+var fs = new FileService({
+  onHistoryListChange: () => { },
+  onFail: () => { }
+});
 Page({
 
   /**
@@ -8,6 +11,7 @@ Page({
    */
   data: {
     files: [],
+    nofile:false,
   },
 
   /**
@@ -15,16 +19,20 @@ Page({
    */
   onLoad: function (options) {
       var that = this;
-      directory.fetch({
-        success: function (res) {
+      fs = new FileService({
+        onFileListChange: (res) => {
           console.log(res);
           that.setData({ files: res });
         },
-        fail: function (res) {
-          console.log(res);
-          wx.showToast("获取失败，请检查网络设置");
-        }
+        onFail: (res) => {
+          console.log('res'); 
+          }
       });
+      fs.fetch();
+      if(this.data.files==''){
+        this.setData({nofile:true});
+      }
+      console.log(this.data.nofile);
   },
 
   /**

@@ -1,6 +1,10 @@
 // miniprogram/pages/comment/comment.js
 import CommentService from '../../service/comment_service.js'
-const comment=new CommentService() 
+// const comment=new CommentService({
+//   shareId:'asdasd',
+//   onCommentListChange:console.log,
+//   onFail:console.log
+// }) 
 Page({
 
   /**

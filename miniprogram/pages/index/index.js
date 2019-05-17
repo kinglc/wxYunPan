@@ -1,8 +1,12 @@
 //index.js
+
 import DirectoryService from '../../service/directory_service.js'
-const app = getApp()
-const directory = new DirectoryService()
-Page({
+const app = getApp();
+var directory = new DirectoryService({
+  onFileListChange:() =>{},
+  onFail: () =>{}
+});
+const page = new Page({
   data: {
     avatarUrl: '../../images/user-unlogin.png',
     userInfo: {},
@@ -14,16 +18,14 @@ Page({
 
   onLoad: function () {
     var that = this;
-    directory.fetch({
-      success: function (res) {
+    directory = new DirectoryService({
+      onFileListChange: (res) => {
         console.log(res);
-        that.setData({files:res});
+        that.setData({ files: res });
       },
-      fail: function (res) {
-        console.log(res);
-        wx.showToast("获取失败，请检查网络设置");
-      }
+      onFail: () => { }
     });
+    directory.fetch();
 
     if (!wx.cloud) {
       wx.redirectTo({
@@ -67,24 +69,4 @@ Page({
       url: '../' + param + '/' + param,
     })
   }
-
-  // upload(){
-  //   wx.chooseImage({
-  //     success: function(res) {
-  //       directory.upload({
-  //         filepath:res.tempFilePaths[0],
-  //         success(res){
-  //           console.log(res)
-  //         },
-  //         fail:console.log
-  //       })
-  //     },
-  //   })
-  // },
-  // fetch(){
-  //   directory.fetch({
-  //     success:console.log,
-  //     fail:console.log
-  //   })
-  // },
 })

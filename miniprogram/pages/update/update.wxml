@@ -1,2 +1,33 @@
-<!--miniprogram/pages/update/update.wxml-->
-<text>miniprogram/pages/update/update.wxml</text>
+<view>
+    <block wx:for="{{localFiles}}">
+        <view class='aFile'>
+        <van-row>
+            <van-col offset="2">
+                <image src='../../images/file.png' mode='aspectFit' class='fileImage'></image>
+            </van-col>
+            <view style='padding-top:20px;'>
+                <van-col offset="1">
+                <!-- 此处需要调后端 -->
+                <text style='font-size:16px;color:black;'>文件1</text>
+                </van-col>
+            </view>
+            <van-col offset="10">
+                <van-checkbox>待修改</van-checkbox>
+            </van-col>
+        </van-row>
+        </view>
+    </block>
+</view>
+
+<view class='footer'>
+    <view style='padding-top:8px;'>
+    <van-row>
+        <van-col offset="7">
+            <van-button type="info" round="true">上传</van-button>
+        </van-col>
+        <van-col offset="2">
+            <van-button type="default" round="true">取消</van-button>
+        </van-col>
+    </van-row>
+    </view>
+</view>

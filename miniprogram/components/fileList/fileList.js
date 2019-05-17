@@ -1,6 +1,15 @@
 // components/fileList/fileList.js
 import DirectoryService from '../../service/directory_service.js'
-const directory = new DirectoryService()
+import FileService from '../../service/file_service.js'
+
+const directory = new DirectoryService({
+  onFileListChange :console.log,
+  onFail:console.log
+})
+const fs = new FileService({
+  onHistoryListChange:() => { },
+  onFail: () => { }
+});
 Component({
   /**
    * 组件的属性列表
@@ -12,6 +21,18 @@ Component({
     }
   },
 
+  attached(){
+    var suffix = this.data.file.filename.split('.')[1];
+    this.setData({
+      filename:this.data.file.filename
+    })
+    if (this.data.file.is_image){
+      this.setData({
+        imgsrc:this.data.file.cloudPath
+      })
+    }
+  },
+
   /**
    * 组件的初始数据
    */
@@ -19,6 +40,9 @@ Component({
     showPop:false,
     showRename:false,
     newName:'',
+    filename:'',
+    imgsrc:'../../images/file.png',
+    show:true
   },
 
   /**
@@ -26,8 +50,12 @@ Component({
    */
   methods: {
     showPop: function () {
-      if (this.dataset.pop=="true")
-        this.setData({ showPop:true});
+      if (this.dataset.type=="pop"){
+          this.setData({ showPop:true});
+      }
+      else if(this.dataset.type=='delete'){
+          this.delete();
+      }
     },
 
     closePop: function () {
@@ -47,23 +75,14 @@ Component({
       this.setData({ newName: e.detail.value });
     },
 
-    rename:function(e){
-      var suffix = this.data.file.filename.split('.')[1];
-      console.log(suffix);
+    rename: function (e) {
+      var that = this;
+      var newname = that.data.newName + '.' + this.data.file.filename.split('.')[1];
       directory.rename({
-        fileId:this.data.file._id,
-        filename:this.data.newName+'.'+suffix,
-        success: function (res) {
-           console.log(res);
-           wx.navigateTo({
-           url: '../../pages/index/index',
-         });
-        },
-        fail:function (res) {
-         console.log(res);
-         wx.showToast("重命名失败，请检查网络设置");
-        }
+        fileId: that.data.file._id,
+        filename: newname
       });
+      that.setData({ filename: newname });
     },
 
     delete:function(){
@@ -73,23 +92,36 @@ Component({
         content: '确定删除此文件？',
         success(res) {
           if (res.confirm) {
-            directory.remove({
-              fileId: that.data.file._id,
-              success: function (res) {
-                console.log(res);
-                wx.navigateTo({
-                  url: '../../pages/index/index',
-                });
-               },
-              fail: function (res) { 
-                console.log(res);
-                wx.showToast("删除失败，请检查网络设置");
-              },
-            });
+            directory.remove(that.data.file._id);
+            that.setData({show:false});
           } 
         }
       })
-    }
+    },
+
+    preview:function(){
+      var that=this;
+      fs.preview({
+        path:that.data.file.cloudPath,
+        success:(res)=>{console.log(res)},
+        fail: (res) => { console.log(res) }
+      })
+    },
+
+    download:function(){
+      var that = this;
+      fs.downloadFile({
+        cloudpath:'cloud://wxyunpan-936858.7778-wxyunpan-936858/0d398854-edcf-49b3-8425-f6b815a2dde7.png',
+        success:(res)=>{
+          console.log(res);
+          wx.showToast("下载成功！");
+        },
+        fail: (res) => {
+          console.log(res);
+          wx.showToast("下载失败！")
+        },
+      })
+  }
 
   }
 })
