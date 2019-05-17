@@ -19,9 +19,17 @@
     "van-icon": "vant/icon/index",
     "van-row": "vant/row/index",
     "van-col": "vant/col/index",
-    "van-button":"vant/button/index",
-    "van-card":"vant/card/index",
-    "van-popup":"vant/popup/index",
+    "van-cell": "vant/cell/index",
+    "van-button": "vant/button/index",
+    "van-card": "vant/card/index",
+    "van-search": "vant/search/index",
+    "van-radio": "vant/radio/index",
+    "van-checkbox": "vant/checkbox/index",
+    "van-checkbox-group": "vant/checkbox-group/index",
+    "van-tabbar": "vant/tabbar/index",
+    "van-tabbar-item": "vant/tabbar-item/index",
+    "van-popup": "vant/popup/index",
     "van-dialog": "vant/dialog/index"
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }

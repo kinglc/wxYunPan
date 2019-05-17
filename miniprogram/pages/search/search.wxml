@@ -1,2 +1,99 @@
-<!--miniprogram/pages/search/search.wxml-->
-<text>miniprogram/pages/search/search.wxml</text>
+<!-- 搜索框 -->
+<view>
+<van-search value="{{ value }}" placeholder="请输入搜索关键词" />
+</view>
+<view>
+  <!-- 选择框 -->
+  <view id='head'>
+    <van-row>
+      <van-col span="5" offset="1"><text>搜索结果：</text></van-col>
+      <van-col span="4" offset="14" bindtap="changeSwitch">
+          <van-icon name='passed' size='20px'></van-icon>
+      </van-col>
+    </van-row>
+  </view>
+  <!-- 搜索结果列表 -->
+  <view wx:if="{{choose==true}}">
+    <block wx:for="{{list}}" wx:key="{{index}}">
+       <view class='aFile' bindtap='turn'>
+        <van-row>
+            <van-col offset="1" span="3" class='usrImage' >
+                <van-icon name="user-circle-o" size='40px'></van-icon>
+            </van-col>
+            <van-col offset="1" span="18">
+            <view style='padding-top:10px;'>
+                  <van-row>
+                    <van-col>
+                      <van-icon name="notes-o" class='fileImage' size='30px'></van-icon>
+                    </van-col>
+                    <van-col offset="2">
+                      <text style='font-size:1.2rem;color:black;'>{{item.fileName}}</text>
+                    </van-col>
+                  </van-row>
+                  <van-row>
+                    <van-col span="12">
+                      <text style='font-size:0.8rem;color:#a3a3a3'>{{item.fileTime}}</text>
+                    </van-col>
+                    <van-col offset="6">
+                      <text style='font-size:0.8rem;color:#a3a3a3'>{{item.usr}}</text>
+                    </van-col>
+                  </van-row>
+            </view>
+            </van-col>
+        </van-row>
+        </view>
+    </block>
+  </view>
+  <!-- 选择搜索结果 -->
+  <view wx:elif="{{choose==false}}">
+    <!-- 选择列表 -->
+    <van-checkbox-group value="{{ result }}" bind:change="onChange">
+      <van-row wx:for="{{list}}" wx:key="{{index}}">
+            <van-col offset="1" span="3" class='usrImage' >
+                <van-icon name="user-circle-o" size='40px'></van-icon>
+            </van-col>
+            <van-col offset="1" span="14">
+              <view style='padding-top:10px;'>
+                    <van-row>
+                      <van-col>
+                        <van-icon name="notes-o" class='fileImage' size='30px'></van-icon>
+                      </van-col>
+                      <van-col offset="2">
+                        <text style='font-size:1.2rem;color:black;'>{{item.fileName}}</text>
+                      </van-col>
+                    </van-row>
+                    <van-row>
+                      <van-col span="17">
+                        <text style='font-size:0.8rem;color:#a3a3a3'>{{item.fileTime}}</text>
+                      </van-col>
+                      <van-col offset="1">
+                        <text style='font-size:0.8rem;color:#a3a3a3'>{{item.usr}}</text>
+                      </van-col>
+                    </van-row>
+              </view>
+            </van-col>
+            <van-col span="4" offset="1">
+              <van-checkbox catch:tap="noop" class="checkboxes-{{ item }}" name="{{ item }}" />
+            </van-col>
+        </van-row>
+    </van-checkbox-group>
+
+    <!-- 保存tabbar -->
+    <van-tabbar active="{{active}}" bind:change="saveToCloud">
+      <van-tabbar-item>
+      <image
+        slot="icon"
+        src="{{ icon.normal }}"
+        mode="aspectFit"
+      />
+      <image
+        slot="icon-active"
+        src="{{ icon.active }}"
+        mode="aspectFit"
+      />
+      保存到云盘
+    </van-tabbar-item>
+    
+  </van-tabbar>
+  </view>
+</view>
