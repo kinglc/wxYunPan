@@ -14,11 +14,11 @@
   </van-row>  
 </view>
 
-<!-- <file-list></file-list> -->
+<file-list wx:for="{{files}}" file="{{item}}" data-pop="true" wx:key="{{index}}"></file-list>
 
 <view class='footer'>
   <van-row>
-    <van-col span="8" ><van-button type='info' bindtap='refresh'>我的文件</van-button></van-col>
+    <van-col span="8" ><van-button type='info' bindtap="turn" data-url='index'>我的文件</van-button></van-col>
     <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='share'>我的分享</van-button></van-col>
     <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='search'><van-icon name="search" size='30px'></van-icon></van-button></van-col>
   </van-row>

@@ -1,13 +1,38 @@
+/**
+ * @typedef CommentInfo
+ * @property {string} _id - 文件ID 
+ * @property {date} createTime - 文件创建时间
+ * @property {string} shareId - 所评论的分享的ID
+ * @property {number} score - 评分[0-5]
+ * @property {string} comment - 评价
+ * @property {string} nickname - 评论用户名
+ * @property {string} avatar - 用户头像
+ */
 
-function getUserInfo({ success, fail }) {
-  wx.getUserInfo({
-    success(res) {
-      success({
-        avatar: res.userInfo.avatarUrl,
-        nickname: res.userInfo.nickName
-      });
-    },
-    fail
+/**
+ * @typedef ErrorMsg
+ * @property {string} errMsg - 错误信息
+ * @property ...
+ */
+
+// function getUserInfo({ success, fail }) {
+//   wx.getUserInfo({
+//     success(res) {
+//       success({
+//         avatar: res.userInfo.avatarUrl,
+//         nickname: res.userInfo.nickName
+//       });
+//     },
+//     fail
+//   })
+// }
+
+function getUserInfo() {
+  return new Promise((success, fail) => {
+    wx.getUserInfo({
+      success,
+      fail
+    })
   })
 }
 
@@ -18,109 +43,123 @@ function getUserInfo({ success, fail }) {
  * fetch：拉取评论数据
  */
 export default class CommentService {
+
   /**
-   * 构造函数
-   * @param {string} shareId - 分享的Id
+   * @constructor
+   * @param {Object} option
+   * @param {string} option.shareId - 分享的Id
+   * @param {function(Array<CommentInfo>)} option.onCommentListChange - 函数调用成功修改数据后的监听器
+   * @param {function(ErrorMsg)} option.onFail - 函数调用失败的监听器
    */
-  constructor(shareId) {
-    this.fetching = false;
-    this.shareId = shareId;
+  constructor({
+    shareId,
+    onCommentListChange = () => { },
+    onFail = () => { }
+  }) {
+    this._shareId = shareId;
+    this._setup(onCommentListChange, onFail);
     wx.cloud.init();
+    const db = wx.cloud.database();
+    const sharedb = db.collection('share');
+    sharedb.doc(shareId)
+    .get().then(res=>{  
+      const history = db.collection('history'); 
+      history.add({
+        data:{
+          createTime:db.serverDate(),
+          files:res.data.files,
+          shareId:res.data._id,
+          avatar:res.data.avatar,
+          nickname:res.data.nickname,
+          name:res.data.name,
+          remark:res.data.remark
+        }
+      })
+    }).catch(console.log);
+   
+    this._fetching = false;
   }
 
-  getData() {
-    if (this.data == undefined || this.data == null) {
-      this.data = [];
+  _dataChanged() {
+    this.onCommentListChange(this._getData())
+  }
+
+  _setup(onCommentListChange, onFail) {
+    this.onCommentListChange = onCommentListChange;
+    this.onFail = onFail
+    return this;
+  }
+
+  _getData() {
+    if (this._data == undefined || this._data == null) {
+      this._data = [];
     }
-    return this.data;
+    return this._data;
   }
-
 
   /**
-   * 对该分享作出评论，会刷新data，请通过success进行回调
+   * 对该分享作出评论
    * @param {Object} options
    * @param {string} options.comment - 评论
-   * @param {number} options.score - 给出对该分享的评分（0-5）
-   * @param {function} options.success - 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function} options.fail - 调用失败的回调函数
+   * @param {number} options.score - 给出对该分享的评分（0-5
    */
   comment({
     comment,
-    score,
-    success = () => { },
-    fail = () => { }
+    score
   }) {
     if (score < 0 || score > 5) {
-      fail({
+      this.onFail({
         errMsg: '无效的评分'
       })
       return
     }
-    var that = this;
+
     const db = wx.cloud.database();
     const _ = db.command;
     const commentdb = db.collection('comment');
-    getUserInfo({
-      success(res){
-        commentdb.add({
-          data: {
-            shareId: that.shareId,
-            score,
-            comment,
-            createTime: db.serverDate(),
-            avatar:res.avatar,
-            nickname:res.nickname
-          },
-          success(res) {
-            const sharedb = db.collection('share');
-            sharedb.doc(that.shareId).update({
-              data:{
-                comment:_.inc(1),
-                score:_.inc(score)
-              },
-              success(res2){
-                commentdb.doc(res._id).get({
-                  success(res){
-                    let data = that.getData();
-                    data.unshift(res.data);
-                    success(data)
-                  },
-                  fail
-                })
-              },
-              fail
-            })
-          },
-          fail
-        })
-      },
-      fail
+
+    getUserInfo().then(res=>{
+      return commentdb.add({
+        data: {
+          shareId: this._shareId,
+          score,
+          comment,
+          createTime: db.serverDate(),
+          avatar: res.userInfo.avatarUrl,
+          nickname: res.userInfo.nickName
+        }
+      })   
+    }).then(res=>{
+      const sharedb = db.collection('share');
+      return sharedb.doc(this._shareId).update({
+        data: {
+          comment: _.inc(1),
+          score: _.inc(score)
+        }
+      })
+    }).then(res=>{
+      return commentdb.doc(res._id).get() 
+    }).then(res=>{
+      let data = this._getData();
+      data.unshift(res.data);
+      this._dataChanged();
     })
-   
-
-
+    .catch(this.onFail);
   }
 
 
   /**
    * 拉取20条评论数据并入当前数组
-   * @param {Object} option
-   * @param {function(Array)} option.success 响应成功的回调函数，参数为更新后的文件列表
-   * @param {function(Object)} option.fail
    */
-  fetch({
-    success = (res) => { },
-    fail = (res) => { }
-  }) {
-    if (this.fetching == true) {
-      fail({
+  fetch(){
+    if (this._fetching == true) {
+      this.onFail({
         errMsg: '请等待上次的查询'
       })
       return;
     }
-    this.fetching = true;
-    var that = this;
-    let data = this.getData();
+    this._fetching = true;
+    let data = this._getData();
     let lastTimestamp = null;
     if (data.length != 0) {
       lastTimestamp = data[data.length - 1].createTime;
@@ -132,22 +171,15 @@ export default class CommentService {
     const commentdb = db.collection('comment');
     commentdb.where({
       createTime: _.lt(lastTimestamp),
-      shareId:this.shareId,
-    }).orderBy('createTime', 'desc').get({
-      success(res) {
-        that.data = data.concat(res.data);
-        success(that.data);
-        that.fetching = false;
-      },
-      fail(res) {
-        fail(res);
-        that.fetching = false;
-      }
+      shareId:this._shareId,
+    }).orderBy('createTime', 'desc')
+    .get().then(res=>{
+      this._data = this._getData().concat(res.data);
+      this._fetching = false;
+      this._dataChanged();
+    }).catch(res=>{
+      this._fetching = false;
+      onFail(res);
     })
-
   }
-
-
-
-
 }

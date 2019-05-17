@@ -9,10 +9,9 @@ exports.main = async (event, context) => new Promise((resolve, reject) => {
   const db = cloud.database();
   const _ = db.command;
   const sharedb = db.collection('share');
+  console.log(event)
   sharedb.where({
     _openid: wxContext.OPENID,
-    createTime: _.lt(event.createTime),
-  }).orderBy('createTime', 'desc').get({
-    success: resolve,
-  })
+    createTime: _.lt(new Date(event.createTime)),
+  }).orderBy('createTime', 'desc').limit(20).get().then(resolve).catch(reject)
 })

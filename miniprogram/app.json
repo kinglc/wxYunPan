@@ -20,6 +20,8 @@
     "van-row": "vant/row/index",
     "van-col": "vant/col/index",
     "van-button":"vant/button/index",
-    "van-card":"vant/card/index"
+    "van-card":"vant/card/index",
+    "van-popup":"vant/popup/index",
+    "van-dialog": "vant/dialog/index"
   }
 }
