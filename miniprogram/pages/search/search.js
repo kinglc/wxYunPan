@@ -5,6 +5,35 @@ Page({
    * 页面的初始数据
    */
   data: {
+    value:'',
+    choose: true,
+    active: 0,
+    icon: {
+      normal: 'save-cloud.png',
+      active: 'save-cloud.png'
+    },
+    select:[],
+    list:[
+      { fileName: '文件1', fileTime: '2019-04-29 00:00', usr: '用户1'},
+      { fileName: '文件2', fileTime: '2019-04-29 00:00', usr: '用户2' },
+      { fileName: '文件3', fileTime: '2019-04-29 00:00', usr: '用户3' }
+    ],
+  },
+  
+  changeSwitch(){
+    var tmp = this.data.choose;
+    this.setData({
+      choose: !tmp
+    });
+  },
+
+  turn(){
+    wx.navigateTo({
+      url: '../index/index',
+    })
+  },
+
+  saveToCloud(){
 
   },
 

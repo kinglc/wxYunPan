@@ -1,1 +1,9 @@
 /* miniprogram/pages/search/search.wxss */
+#head{
+  font-size: 0.8rem;
+  padding-bottom: 10px;
+  color: #a3a3a8;
+}
+.usrImage{
+  padding-top: 35px;
+}
