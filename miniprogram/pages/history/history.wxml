@@ -1,2 +1,0 @@
-<!--miniprogram/pages/history/history.wxml-->
-<file-list wx:for="{{files}}" file="{{item}}" data-pop="false" wx:key="{{index}}"></file-list>
