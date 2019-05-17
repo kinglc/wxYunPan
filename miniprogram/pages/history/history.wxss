@@ -1,9 +1,0 @@
-.fileImage{
-    height: 60px;
-    width: 50px;
-}
-
-.aFile{
-    font-size: 15px;
-    color: gray;
-}
