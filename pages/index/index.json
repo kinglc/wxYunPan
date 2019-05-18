@@ -1,6 +1,0 @@
-{
- "usingComponents": {
-  "icon-info": "/components/iconInfo/iconInfo",
-  "file-list":"/components/fileList/fileList"
-  }
-}
