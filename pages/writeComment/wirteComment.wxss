@@ -1,0 +1,21 @@
+.writeTitle{
+    width: 100%;
+    height: 30px;
+    font-size: 15px;
+    border:1px solid #c8c8c8;
+    padding: 7px;
+}
+
+.writeContent{
+    width: 100%;
+    height:170px;
+    font-size: 15px;
+    border:1px solid #c8c8c8;
+}
+
+.score{
+    width:100%;
+    height: 130px;
+    font-size: 15px;
+    border:1px solid #c8c8c8;
+}
