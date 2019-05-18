@@ -41,6 +41,7 @@ function getUserInfo() {
  * 可以拉取评论，发布评论
  * comment:发布评论
  * fetch：拉取评论数据
+ * save: 保存一个文件至我的分享
  */
 export default class CommentService {
 
@@ -95,6 +96,39 @@ export default class CommentService {
       this._data = [];
     }
     return this._data;
+  }
+
+  /**
+   * 保存单个目标文件至我的目录，多个请使用多次
+   * @param {Object} options
+   * @param {string} options.fileId - 待保存的文件ID
+   * @param {function} options.success - 成功回调
+   * @param {function} options.fail - 失败回调
+   */
+  save({
+    fileId,
+    success,
+    fail
+  }){
+    const db = wx.cloud.database();
+    const filedb = db.collection('file');
+    filedb.doc(fileId)
+    .get().then(res=>{
+      console.log(res);
+      return filedb.add({
+        data:{
+        filename:res.data.filename,
+        cloudpath:res.data.cloudpath,
+        isImage:res.data.isImage,
+        createTime:db.serverDate(),
+        size:res.data.size
+        }
+      })
+    }).then((res)=>{
+      success(res);
+    }).catch(res=>{
+      fail(res);
+    })
   }
 
   /**

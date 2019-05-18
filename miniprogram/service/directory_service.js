@@ -100,10 +100,9 @@ export default class DirectoryService{
    * @param {function(ErrorMsg)} option.onFail - 函数调用失败的监听器
    */
   constructor({
-    onFileListChange,
-    onFail
+    onFileListChange = ()=>{},
+    onFail = ()=>{}
   }){
-    // console.log(1);
     this._setup(onFileListChange,onFail);
     wx.cloud.init();
     this._fetching = false;
@@ -237,7 +236,7 @@ export default class DirectoryService{
       return filedb.add({
         data: {
           filename: getNowFormatDate() + suffix,
-          cloudPath: res.fileID,
+          cloudpath: res.fileID,
           isImage:is_image(suffix),
           createTime: db.serverDate(),
           size: fileSize
