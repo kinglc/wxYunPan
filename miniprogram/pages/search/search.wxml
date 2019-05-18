@@ -9,9 +9,9 @@
   <view id='head'>
     <van-row>
       <van-col span="5" offset="1"><text>搜索结果：</text></van-col>
-      <van-col span="2" offset="16" bindtap="changeSwitch">
+      <!-- <van-col span="2" offset="16" bindtap="changeSwitch">
           <van-icon name='passed' size='20px'></van-icon>
-      </van-col>
+      </van-col> -->
     </van-row>
   </view>
   <!-- 搜索结果列表 -->
@@ -47,9 +47,9 @@
     </block>
   </view>
   <!-- 选择搜索结果 -->
-  <view wx:elif="{{choose==false}}">
+  <!-- <view wx:elif="{{choose==false}}"> -->
     <!-- 选择列表 -->
-    <view>
+    <!-- <view>
       <van-row wx:for="{{list}}" wx:key="{{index}}">
             <van-col offset="1" span="3">
                 <image src="{{item.avatar}}" mode='aspectFit' class='avatar'></image>
@@ -75,13 +75,13 @@
               </view>
             </van-col>
             <van-col span="2" offset="1">
-              <van-checkbox class='check' value="{{ select }}" bind:change="onSelect" />
+              <van-checkbox class='check' value="{{ select[index] }}" data-index="{{index}}" bind:change="onSelect" />
             </van-col>
         </van-row>
-    </view>
+    </view> -->
 
     <!-- 保存tabbar -->
-    <van-tabbar active="{{active}}" bind:change="saveToCloud">
+    <!-- <van-tabbar active="{{active}}" bind:change="saveToCloud">
       <van-tabbar-item>
       <image
         slot="icon"
@@ -97,5 +97,5 @@
     </van-tabbar-item>
     
   </van-tabbar>
-  </view>
+  </view> -->
 </view>

@@ -10,11 +10,11 @@ Page({
     value:'',
     choose: true,
     active: 0,
-    icon: {
-      normal: '../../images/save-cloud.png',
-      active: '../../images/save-cloud.png'
-    },
-    select:false,
+    // icon: {
+    //   normal: '../../images/save-cloud.png',
+    //   active: '../../images/save-cloud.png'
+    // },
+    // select: [false,false,false],
     
     list:[
       { _id :1, 
@@ -80,11 +80,14 @@ Page({
     console.log(this.data.value);
     var service = new SearchService({
       onShareListChange: (shareInfo) => {
+          // var tmp=[];
           for(var i=0;i<shareInfo.length;i++){
             shareInfo[i]["createTime"] = formatDate(shareInfo[i]["createTime"]);
+            // tmp[i]=false;
           }
           this.setData({
-            list: shareInfo
+            list: shareInfo,
+            // select: tmp
           });
         },
       onFail: () => { }
@@ -93,13 +96,6 @@ Page({
     service.fetch();
   },
 
-  // 点击选择
-  changeSwitch(){
-    var tmp = this.data.choose;
-    this.setData({
-      choose: !tmp
-    });
-  },
 
   // 点击搜索结果
   turn(){
@@ -108,19 +104,26 @@ Page({
     })
   },
 
-  // 存到云盘
-  saveToCloud(){
+  // // 存到云盘
+  // saveToCloud(){
 
-  },
+  // },
 
-  // 选择文件
-  onSelect(e){
-    var tmp = this.data.select;
-    console.log(e.detail);
-    this.setData({
-      select: !tmp
-    })
-  },
+  // // 点击选择
+  // changeSwitch() {
+  //   var tmp = this.data.choose;
+  //   this.setData({
+  //     choose: !tmp
+  //   });
+  // },
+  // // 选择文件
+  // onSelect(e){
+  //   var tmp = this.data.select[e.target.dataset.index]
+  //   var str = "select["+e.target.dataset.index+"]"
+  //   this.setData({
+  //     [str]:!tmp
+  //   })
+  // },
 
   /**
    * 生命周期函数--监听页面加载
