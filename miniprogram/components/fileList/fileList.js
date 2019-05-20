@@ -92,7 +92,12 @@ Component({
         content: '确定删除此文件？',
         success(res) {
           if (res.confirm) {
-            directory.remove(that.data.file._id);
+            if(that.data.type=="delete"){
+              fs.remove(that.data.file.historyId);
+            }
+            else if(that.data.type=="pop"){
+              directory.remove(that.data.file._id);
+            }
             that.setData({show:false});
           } 
         }

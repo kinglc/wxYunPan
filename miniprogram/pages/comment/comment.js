@@ -11,14 +11,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-      commentArray:[1,2,3]
+    share:{score:1},
+    imgsrc:'../../images/file.png',
+    comments:[]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-      
+    console.log('bbbb');
+    let shareId = options.shareId;
+    console.log(shareId);
   },
 
   /**

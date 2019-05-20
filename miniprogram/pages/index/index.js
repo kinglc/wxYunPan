@@ -17,6 +17,9 @@ const page = new Page({
   },
 
   onLoad: function () {
+    // wx.navigateTo({
+    //   url: '../comment/comment',
+    // })
     var that = this;
     directory = new DirectoryService({
       onFileListChange: (res) => {

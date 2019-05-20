@@ -1,24 +1,13 @@
 <!--miniprogram/pages/comment/comment.wxml-->
-<view class='header'>
+<!-- <view class='header'>
     <van-row>
         <van-col><text>娃哈哈</text></van-col>
     </van-row>
-</view>
+</view> -->
 
-<view style='border: 1px solid #c8c8c8;'>
-    <van-row>
-        <van-col><view style='padding-top:60px;padding-left:5px;font-size:15px;color:gray;'>评价列表</view>
-        </van-col>
-        <van-col offset="4">
-            <image src='../../images/file.png' mode='aspectFit' class='fileImage'></image>
-        </van-col>
-        <van-col>
-            <view style='padding-top:20px;font-size: 20px;color: #f79414;'>
-            4.3分</view>
-            <view style='font-size:15px;color:gray;'>
-            共有3人评价</view>
-        </van-col>
-    </van-row>
+<view class='file'>
+  <image src='{{imgsrc}}' mode='aspectFit'></image>
+  <view>{{share.score}}</view>
 </view>
 
 <view class="comments">
@@ -27,7 +16,7 @@
         <van-row>
             <van-col offset="1" span="4">
                 <view style='padding-top:30px;justify-content:center;'>
-                    <image class="userAvatar" src='../../images/unLog.png'></image>
+                    <image class="userAvatar" src='{{item}}'></image>
                 </view>
                 <view style='justify-content:center;'>
                     <text class='userName'>用户1</text>

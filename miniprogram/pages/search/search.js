@@ -101,7 +101,9 @@ Page({
 
 
   // 点击搜索结果
-  turn(e){
+  turn(e) {
+    // console.log('aaaa');
+    console.log(e.currentTarget.dataset.id);
     wx.navigateTo({
       url: '../comment/comment?shareId=' + e.currentTarget.dataset.id
     })

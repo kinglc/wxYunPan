@@ -1,7 +1,7 @@
 /**
  * @typedef ShareInfo
  * @property {string} _id - 分享的ID
- * @property {Array<{_id:string,filename:string}>} files - 一批文件的ID 
+ * @property {Array<{_id:string,filename:string,isImage:boolean,size:number,cloudpath:string}>} files - 一批文件的ID 
  * @property {date} createTime - 文件创建时间
  * @property {string} name - 分享名称
  * @property {string} remark - 分享说明
@@ -128,7 +128,10 @@ export default class ShareService {
     }).get().then(res=>{
       files = res.data.map(item=>({
         _id:item._id,
-        filename:item.filename
+        isImage:item.isImage,
+        filename:item.filename,
+        cloudpath:item.cloudpath,
+        size:item.size        
       }));
       return getUserInfo();
     }).then(res=>{
