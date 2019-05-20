@@ -17,7 +17,7 @@
   <!-- 搜索结果列表 -->
   <view wx:if="{{choose==true}}">
     <block wx:for="{{list}}" wx:key="{{index}}">
-       <view class='aFile' bindtap='turn'>
+       <view class='aFile' bindtap='turn' data-id="{{item._id}}">
         <van-row>
             <van-col offset="1" span="3" class='usrImage' >
                 <image src="{{item.avatar}}" mode='aspectFit' class='avatar'></image>

@@ -18,7 +18,8 @@ Page({
     
     list:[
       { _id :1, 
-        files: [{ _id :1, filename: "文件1" }, { _id :2, filename: "文件2" }], 
+        files: [{ _id :1, filename: "文件1", isImage: false, size: 1, cloudpath: "www"}, 
+         { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }], 
         createTime: 18888888,
         name:"第一个分享", 
         remark:"分享说明", 
@@ -29,7 +30,8 @@ Page({
       },
       {
         _id: 2,
-        files: [{ _id: 1, filename: "文件1" }, { _id: 2, filename: "文件2" }],
+        files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
+        { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
         createTime: 18888888,
         name: "第二个分享",
         remark: "分享说明",
@@ -40,7 +42,8 @@ Page({
       },
       {
         _id: 3,
-        files: [{ _id: 1, filename: "文件1" }, { _id: 2, filename: "文件2" }],
+        files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
+          { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
         createTime: 18888888,
         name: "第二个分享",
         remark: "分享说明",
@@ -98,9 +101,9 @@ Page({
 
 
   // 点击搜索结果
-  turn(){
+  turn(e){
     wx.navigateTo({
-      url: '../index/index',
+      url: '../comment/comment?shareId=' + e.currentTarget.dataset.id
     })
   },
 
