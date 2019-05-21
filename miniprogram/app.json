@@ -5,7 +5,6 @@
     "pages/history/history",
     "pages/search/search",
     "pages/share/share",
-    "pages/update/update",
     "pages/choose/choose"
   ],
   "window": {

@@ -71,5 +71,20 @@ const page = new Page({
     wx.navigateTo({
       url: '../' + param + '/' + param,
     })
+  },
+
+  update:function(){
+    wx.chooseMessageFile({
+      count:1,
+      type:'all',
+      success(res){
+        console.log(res);
+        directory.upload(res.tempFiles[0].path);
+      },
+      fail(res){
+        console.log(res);
+      }
+    });
   }
+
 })

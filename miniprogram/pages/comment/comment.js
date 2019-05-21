@@ -1,5 +1,10 @@
 // miniprogram/pages/comment/comment.js
 import CommentService from '../../service/comment_service.js'
+var comment = new CommentService({
+  shareId:'',
+  onCommentListChange: () => { },
+  onFail: () => { }
+})
 // const comment=new CommentService({
 //   shareId:'asdasd',
 //   onCommentListChange:console.log,
@@ -11,6 +16,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    shareId:'',
     share:{score:1},
     imgsrc:'../../images/file.png',
     comments:[]
@@ -20,9 +26,20 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log('bbbb');
-    let shareId = options.shareId;
-    console.log(shareId);
+    var that = this;
+    // let id = options.shareId;
+    that.setdata({ shareId: options.shareId})
+    console.log('shareId:'+that.data.shareId);
+    comment = new CommentService({
+      shareId: that.data.shareId,
+      onCommentListChange:(res) => {
+        console.log(res);
+        that.setdata({comments:res})
+       },
+      onFail:(res) => {
+        console.log(res);
+       }
+    })
   },
 
   /**

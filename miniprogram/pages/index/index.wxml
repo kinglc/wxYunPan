@@ -5,7 +5,7 @@
     <van-col span="3" offset="9" bindtap="turn" data-url='history'>
         <icon-info name='clock' info='浏览历史'></icon-info>
     </van-col>
-    <van-col span="3" offset="1" bindtap="turn" data-url='update'>
+    <van-col span="3" offset="1" bindtap="update">
         <icon-info name='add' info='上传'></icon-info> 
     </van-col>
     <van-col span="3" bindtap="turn" data-url='choose'>
