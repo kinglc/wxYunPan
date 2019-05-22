@@ -1,6 +1,7 @@
 // miniprogram/pages/search/search.js
 import SearchService from '../../service/search_service.js'
 const app = getApp();
+var service;
 Page({
 
   /**
@@ -81,7 +82,7 @@ Page({
   // 点击搜索
   onSearch(e) {
     console.log(this.data.value);
-    var service = new SearchService({
+    service = new SearchService({
       onShareListChange: (shareInfo) => {
           // var tmp=[];
           for(var i=0;i<shareInfo.length;i++){

@@ -1,2 +1,85 @@
-<!--miniprogram/pages/share/share.wxml-->
-<text>miniprogram/pages/share/share.wxml</text>
+
+<view>
+  <!-- 选择框 -->
+  <view id='head'>
+    <van-row>
+      <van-col span="8" offset="1"><text>历史分享结果：</text></van-col>
+      <van-col span="2" offset="13" bindtap="changeSwitch">
+          <van-icon name='passed' size='20px'></van-icon>
+      </van-col>
+    </van-row>
+  </view>
+  <!-- 搜索结果列表 -->
+  <view wx:if="{{choose==true}}">
+    <block wx:for="{{list}}" wx:key="{{index}}">
+       <view class='aFile' bindtap='turn' data-id="{{item._id}}">
+        <van-row>
+            <van-col offset="1" span="3" class='usrImage' >
+                <image src="../../images/file.png" mode='aspectFit' class='avatar'></image>
+            </van-col>
+            <van-col offset="1" span="18">
+            <view style='padding-top:10px;'>
+                  <van-row>
+                    <van-col>
+                      <text style='font-size:1rem;color:black;'>{{item.name}}</text>
+                    </van-col>
+                    <van-col offset="2">
+                      <van-tag wx:if="{{item.pub==true}}" round color="#ffc20e" size="medium">共享</van-tag>
+                      <van-tag wx:else round color="#006c54" size="medium">私密</van-tag>
+                    </van-col>
+                  </van-row>
+                  <van-row>
+                    <van-col span="12">
+                      <text style='font-size:0.8rem;color:#a3a3a3'>{{item.createTime}}</text>
+                    </van-col>
+                  </van-row>
+            </view>
+            </van-col>
+        </van-row>
+        </view>
+    </block>
+  </view>
+  <!-- 选择搜索结果 -->
+  <view wx:elif="{{choose==false}}">
+    <!-- 选择列表 -->
+    <van-radio-group value="{{radio}}" bind:change="onChange">
+      <van-row wx:for="{{list}}" wx:key="{{index}}">
+            <van-col offset="1" span="3">
+                <image src="../../images/file.png" mode='aspectFit' class='avatar'></image>
+            </van-col>
+            <van-col offset="1" span="16">
+              <view style='padding-top:10px;'>
+                    <van-row>
+                      <van-col>
+                        <text style='font-size:1rem;color:black;'>{{item.name}}</text>
+                      </van-col>
+                      <van-col offset="2">
+                        <van-tag wx:if="{{item.pub==true}}" round color="#ffc20e" size="medium">共享</van-tag>
+                        <van-tag wx:else round color="#006c54" size="medium">私密</van-tag>
+                      </van-col>
+                    </van-row>
+                    <van-row>
+                      <van-col span="17">
+                        <text style='font-size:0.8rem;color:#a3a3a3'>{{item.createTime}}</text>
+                      </van-col>
+                    </van-row>
+              </view>
+            </van-col>
+            <van-col span="2" offset="1">
+              <van-radio name="{{index}}" />
+            </van-col>
+        </van-row>
+    </van-radio-group>
+    <!-- tabbar -->
+    <view class='footer'>
+      <van-row>
+        <van-col offset="2" span="10" >
+          <van-button type='info' bindtap="onCancel">取消分享</van-button>
+        </van-col>
+        <van-col span="10">
+          <van-button type='info' plain open-type='share'>分享给好友</van-button>
+        </van-col>
+      </van-row>
+    </view>
+  </view>
+</view>

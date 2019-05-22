@@ -1,1 +1,27 @@
-/* miniprogram/pages/share/share.wxss */
+#head{
+  font-size: 0.8rem;
+  padding-top: 1rem;
+  padding-bottom: 10px;
+  color: #a3a3a8;
+}
+.avatar{
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+}
+.fileImage{
+  width: 30px;
+  height: 30px;
+}
+.van-radio{
+  margin-top: 20px;
+}
+.footer{
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+
+.footer .van-button{
+  width: 100%;
+}
