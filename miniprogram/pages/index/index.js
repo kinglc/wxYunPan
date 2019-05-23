@@ -66,10 +66,24 @@ const page = new Page({
     }
   },
 
+  onReachBottom(){
+    var that = this;
+    directory = new DirectoryService({
+      onFileListChange: (res) => {
+        console.log(res);
+        that.setData({ files: res });
+        app.globalData.myfile=res;
+      },
+      onFail: () => { }
+    });
+    directory.fetch();
+  },
+
   turn:function(e){
     var param = e.currentTarget.dataset.url;
+    app.globalData.myfile=this.data.files;
     wx.navigateTo({
-      url: '../' + param + '/' + param,
+        url: '../' + param + '/' + param
     })
   },
 
@@ -79,7 +93,20 @@ const page = new Page({
       type:'all',
       success(res){
         console.log(res);
-        directory.upload(res.tempFiles[0].path);
+        var path = res.tempFiles[0].path;
+        console.log(path);
+        directory.upload({
+          filePath: 'path',
+          success:function(res){
+            console.log(res);
+            wx.showToast({
+              title: '上传成功',
+            })
+          },
+          fail:function(res) {
+            console.log(res);
+          }
+          });
       },
       fail(res){
         console.log(res);

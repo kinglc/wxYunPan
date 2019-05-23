@@ -215,9 +215,16 @@ export default class DirectoryService{
 
   /**
    * 上传一个文件，有多个请调用多次
-   * @param {string} filePath - 文件路径
+   * @param {Object} options
+   * @param {string} options.filePath - 文件路径
+   * @param {function} options.success - 成功回调
+   * @param {function} options.fail - 失败回调，会覆盖初始设置的onFail监听器
    */
-  upload(filePath){ 
+  upload({
+    filePath,
+    success=null,
+    fail=null
+  }){ 
 
     let suffix = getSuffix(filepath);
     let fileID = generateUUID();
@@ -247,7 +254,8 @@ export default class DirectoryService{
     }).then(res=>{
       this._getData().unshift(res.data);
       this._fileChanged();
+      success(res);
     }).
-    catch(this.onFail);
+    catch(fail==null?this.onFail:fail);
   }
 }

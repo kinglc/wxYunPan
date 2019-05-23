@@ -1,2 +1,4 @@
 <!--miniprogram/pages/choose/choose.wxml-->
-<text>miniprogram/pages/choose/choose.wxml</text>
+
+<!-- <file-list wx:for="{{files}}" file="{{item}}" data-type="select" wx:key="{{index}}"></file-list> -->
+  <van-radio name="2" clickable disabled='false' abel-disabled='false'>单选框 2</van-radio>

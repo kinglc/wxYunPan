@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+      "file-list": "/components/fileList/fileList"
+  },
+  "navigationBarTitleText": "文件选择"
 }

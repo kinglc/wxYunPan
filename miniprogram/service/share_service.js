@@ -6,6 +6,7 @@
  * @property {string} name - 分享名称
  * @property {string} remark - 分享说明
  * @property {string} nickname - 分享人
+ * @property {boolean} pub - 是否公开分享
  * @property {string} avatar - 分享人头像链接
  * @property {number} comment - 评论数量
  * @property {number} score - 评论分数和

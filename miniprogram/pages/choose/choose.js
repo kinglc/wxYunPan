@@ -1,18 +1,34 @@
 // miniprogram/pages/choose/choose.js
+var app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    files:[],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-
+  onLoad: function () {
+    this.setData({
+      files:app.globalData.myfile,
+    })
+    console.log(this.data.files);
+  }, 
+  
+  onReachBottom() {
+    var that = this;
+    directory = new DirectoryService({
+      onFileListChange: (res) => {
+        console.log(res);
+        that.setData({ files: res });
+      },
+      onFail: () => { }
+    });
+    directory.fetch();
   },
 
   /**

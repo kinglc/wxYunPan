@@ -10,7 +10,9 @@ App({
         traceUser: true,
       })
     }
+  },
 
-    this.globalData = {}
+  globalData:{
+    myfile:[],
   }
 })

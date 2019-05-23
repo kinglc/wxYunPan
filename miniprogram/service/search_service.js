@@ -97,6 +97,7 @@ export default class SearchService {
     const sharedb = db.collection('share');
 
     sharedb.where({
+      pub:true,
       createTime: _.lt(lastTimestamp),
       name:{
         $regex:'.*'+filter+".*",

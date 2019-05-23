@@ -1,12 +1,13 @@
 <!--components/fileList/fileList.wxml-->
 <view wx:if='{{show}}'>
-  <view class='file' bindlongpress='showPop' bindtap='preview'>
+  <view class='file' bindlongpress='showPop' bindtap='funfile'>
     <van-row>
       <van-col span="4" offset="1"><image src='{{imgsrc}}' mode='aspectFit'></image></van-col>
-      <van-col span="">
+      <van-col span="16">
         <view class='name'>{{filename}}</view>
         <view class='time'>{{file.createTime}}</view>
       </van-col>
+      <van-col wx:if='{{showSelect}}' span=''> <van-radio name="1" /></van-col>
     </van-row>
   </view>
 
@@ -15,7 +16,7 @@
     position="bottom"
     overlay="true"
     bind:close="closePop"
-    custom-style="background-color:#00000000;"
+    custom-style="background-color:rgba(0,0,0,0);"
     close-on-click-overlay="false"
   >
     <view class='btns'>

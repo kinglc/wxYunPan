@@ -31,6 +31,9 @@ Component({
         imgsrc:this.data.file.cloudPath
       })
     }
+    if(this.dataset.type=='select'){
+      this.setData({showSelect:true});
+    }
   },
 
   /**
@@ -42,7 +45,8 @@ Component({
     newName:'',
     filename:'',
     imgsrc:'../../images/file.png',
-    show:true
+    show:true,
+    showSelect:false,
   },
 
   /**
@@ -102,6 +106,15 @@ Component({
           } 
         }
       })
+    },
+
+    funfile:function(){
+      if(this.dataset.type=='select'){
+        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      }
+      else{
+        this.preview();
+      }
     },
 
     preview:function(){
