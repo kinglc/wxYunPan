@@ -24,3 +24,8 @@
 .footer .van-button{
   width: 100%;
 }
+
+.files{
+  position: absolute;
+  margin-bottom: 50px;
+}

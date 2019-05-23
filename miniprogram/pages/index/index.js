@@ -1,5 +1,5 @@
 //index.js
-
+// let regeneratorRuntime = require("../../utils/regenerator-runtime/runtime");
 import DirectoryService from '../../service/directory_service.js'
 const app = getApp();
 var directory = new DirectoryService({
@@ -26,7 +26,9 @@ const page = new Page({
         console.log(res);
         that.setData({ files: res });
       },
-      onFail: () => { }
+      onFail: (res) => {
+        console.log(res);
+     }
     });
     directory.fetch();
 
@@ -67,17 +69,7 @@ const page = new Page({
   },
 
   onReachBottom(){
-    var that = this;
-    directory = new DirectoryService({
-      onFileListChange: (res) => {
-        console.log(res);
-        that.setData({ files: res });
-        app.globalData.myfile=res;
-      },
-      onFail: () => {
-        console.log(res);
-      }
-    });
+    console.log('a');
     directory.fetch();
   },
 
@@ -89,27 +81,43 @@ const page = new Page({
     })
   },
 
+  upfile: function (res) {
+    var time = res.tempFiles.length*400;
+    for (var i = 0; i < res.tempFiles.length; i++) {
+      var path = res.tempFiles[i].path;
+      console.log(path);
+      directory.upload({
+        filePath: path,
+        success: function (res) {
+          console.log(res);
+        },
+        fail: function (res) {
+          console.log(res);
+        }
+      });
+    }
+    setTimeout(function () {
+      wx.navigateTo({
+        url: '../../pages/index/index',
+      });
+      wx.showToast({
+        title: '上传成功',
+      });
+      },time)
+  },
+
+
   update:function(){
+    var that = this;
     wx.chooseMessageFile({
-      count:1,
+      count:10,
       type:'all',
       success(res){
         console.log(res);
-        var path = res.tempFiles[0].path;
-        console.log(path);
-        directory.upload({
-          filePath: path,
-          success:function(res){
-            console.log(res);
-            wx.showToast({
-              title: '上传成功',
-            });
-            directory.fetch();
-          },
-          fail:function(res) {
-            console.log(res);
-          }
-          });
+        wx.showLoading({
+          title: '上传中',
+        });
+        setTimeout(that.upfile(res), 500);
       },
       fail(res){
         console.log(res);

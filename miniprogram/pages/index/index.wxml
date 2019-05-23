@@ -14,9 +14,9 @@
   </van-row>  
 </view>
 
-<file-list wx:for="{{files}}" file="{{item}}" data-type="pop" wx:key="{{index}}">
-  
-</file-list>
+<view class='files'>
+  <file-list wx:for="{{files}}" file="{{item}}" data-type="pop" wx:key="{{index}}"></file-list>
+</view>
 
 <view class='footer'>
   <van-row>

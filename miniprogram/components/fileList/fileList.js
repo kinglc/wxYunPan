@@ -27,9 +27,9 @@ Component({
       filename:this.data.file.filename,
       createTime:this.data.file.time,
     })
-    if (this.data.file.is_image){
+    if (this.data.file.isImage){
       this.setData({
-        imgsrc:this.data.file.cloudPath
+        imgsrc:this.data.file.cloudpath
       })
     }
     if(this.dataset.type=='select'){
@@ -98,10 +98,10 @@ Component({
         content: '确定删除此文件？',
         success(res) {
           if (res.confirm) {
-            if(that.data.type=="delete"){
+            if(that.dataset.type=="delete"){
               fs.remove(that.data.file.historyId);
             }
-            else if(that.data.type=="pop"){
+            else if(that.dataset.type=="pop"){
               directory.remove(that.data.file._id);
             }
             that.setData({show:false});
