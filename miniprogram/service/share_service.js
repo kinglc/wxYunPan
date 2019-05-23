@@ -6,7 +6,7 @@
  * @property {string} name - 分享名称
  * @property {string} remark - 分享说明
  * @property {string} nickname - 分享人
- * @property {boolean} pub - 是否公开分享
+ * @property {boolean} pub - 是否公开的分享
  * @property {string} avatar - 分享人头像链接
  * @property {number} comment - 评论数量
  * @property {number} score - 评论分数和
@@ -25,6 +25,26 @@ function getUserInfo(){
       fail
     })
   })
+}
+
+function formatDate(t) {
+  var date = new Date(t);
+  var fmt = 'yyyy-MM-dd hh:mm:ss';
+  var o = {
+    "M+": date.getMonth() + 1,                 //月份   
+    "d+": date.getDate(),                    //日   
+    "h+": date.getHours(),                   //小时   
+    "m+": date.getMinutes(),                 //分   
+    "s+": date.getSeconds(),                 //秒   
+    "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
+    "S": date.getMilliseconds()             //毫秒   
+  };
+  if (/(y+)/.test(fmt))
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt))
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return fmt;
 }
 
 /**
@@ -122,11 +142,12 @@ export default class ShareService {
     const _ = db.command;
     const filedb = db.collection('file');
 
-    let files = null;
+    let files = null; 
 
     filedb.where({
       _id:_.in(fileIds)
-    }).get().then(res=>{
+    }).get()
+    .then(res=>{
       files = res.data.map(item=>({
         _id:item._id,
         isImage:item.isImage,
@@ -179,6 +200,9 @@ export default class ShareService {
         createTime:+lastTimestamp
       }
     }).then(res=>{
+      for(var i of res.result.data){
+        i.time = formatDate(i.createTime);
+      }
       this._data = this._getData().concat(res.result.data);
       this._fetching = false;
       this._dataChanged();

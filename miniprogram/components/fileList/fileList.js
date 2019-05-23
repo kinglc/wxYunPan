@@ -24,7 +24,8 @@ Component({
   attached(){
     var suffix = this.data.file.filename.split('.')[1];
     this.setData({
-      filename:this.data.file.filename
+      filename:this.data.file.filename,
+      createTime:this.data.file.time,
     })
     if (this.data.file.is_image){
       this.setData({
@@ -47,6 +48,7 @@ Component({
     imgsrc:'../../images/file.png',
     show:true,
     showSelect:false,
+    createTime:''
   },
 
   /**

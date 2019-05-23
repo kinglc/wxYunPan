@@ -74,7 +74,9 @@ const page = new Page({
         that.setData({ files: res });
         app.globalData.myfile=res;
       },
-      onFail: () => { }
+      onFail: () => {
+        console.log(res);
+      }
     });
     directory.fetch();
   },
@@ -96,12 +98,13 @@ const page = new Page({
         var path = res.tempFiles[0].path;
         console.log(path);
         directory.upload({
-          filePath: 'path',
+          filePath: path,
           success:function(res){
             console.log(res);
             wx.showToast({
               title: '上传成功',
-            })
+            });
+            directory.fetch();
           },
           fail:function(res) {
             console.log(res);

@@ -19,7 +19,25 @@ function is_image(suffix) {
   return regex.test(suffix.toLowerCase());
 }
 
-
+function formatDate(t){
+  var date = new Date(t);
+  var fmt = 'yyyy-MM-dd hh:mm:ss';
+  var o = {
+    "M+": date.getMonth() + 1,                 //月份   
+    "d+": date.getDate(),                    //日   
+    "h+": date.getHours(),                   //小时   
+    "m+": date.getMinutes(),                 //分   
+    "s+": date.getSeconds(),                 //秒   
+    "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
+    "S": date.getMilliseconds()             //毫秒   
+  };
+  if (/(y+)/.test(fmt))
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt))
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return fmt;
+}
 
 /**
  * 生成UUID
@@ -181,6 +199,12 @@ export default class DirectoryService{
       createTime: _.lt(lastTimestamp)
     }).orderBy('createTime','desc').get()
     .then(res=>{
+      for(var i of res.data){
+        // console.log(i.createTime);
+        i.time = formatDate(i.createTime);
+        // console.log(i.createTime.getFullYear()
+        // +'-'+i.createTime.getMonth()+'-'+i.createTime.getDate())
+      }
       this._data = data.concat(res.data);
       this._fetching = false;
       this._fileChanged();
@@ -226,15 +250,15 @@ export default class DirectoryService{
     fail=null
   }){ 
 
-    let suffix = getSuffix(filepath);
+    let suffix = getSuffix(filePath);
     let fileID = generateUUID();
 
     const db = wx.cloud.database();
     const filedb = db.collection('file');
-
+    let fileSize = null;
     getFileInfo(filePath)
     .then(res => {
-      let fileSize = res.size;
+      fileSize = res.size;
       return wx.cloud.uploadFile({
         cloudPath: fileID + suffix,
         filePath: filePath

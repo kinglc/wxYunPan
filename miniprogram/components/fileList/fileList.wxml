@@ -5,7 +5,7 @@
       <van-col span="4" offset="1"><image src='{{imgsrc}}' mode='aspectFit'></image></van-col>
       <van-col span="16">
         <view class='name'>{{filename}}</view>
-        <view class='time'>{{file.createTime}}</view>
+        <view class='time'>{{createTime}}</view>
       </van-col>
       <van-col wx:if='{{showSelect}}' span=''> <van-radio name="1" /></van-col>
     </van-row>

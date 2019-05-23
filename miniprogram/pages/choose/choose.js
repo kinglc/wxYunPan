@@ -28,7 +28,9 @@ Page({
       },
       onFail: () => { }
     });
-    directory.fetch();
+    // directory.fetch({
+    //   time:
+    // });
   },
 
   /**
