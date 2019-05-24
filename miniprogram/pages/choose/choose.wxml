@@ -3,12 +3,20 @@
   <van-row>
     <van-col style='color:#A29F9F;font-size:18px;' span='6' bindtap='turn'>取消</van-col>
     <van-col span='12'>已选中{{len}}个文件</van-col>
-    <van-col style='color:#1989FA;font-size:18px;' span='6' bindtap='select-all'>全选</van-col>
+    <van-col style='color:#1989FA;font-size:18px;' span='6' bindtap='selectall'>全选</van-col>
   </van-row>
 </view>
 
 <view class='files'>
-  <file-list wx:for="{{files}}" bind:changeNum="changeNum" data-index="{{index}}" file="{{item}}" data-type="select" wx:key="{{index}}" data-select='{{all}}'></file-list>
+  <file-list
+   wx:for="{{files}}" 
+   bind:changeNum="changeNum"
+   data-index="{{index}}" 
+   file="{{item}}" 
+   data-type="select" 
+   wx:key="{{index}}" 
+   id='myCom{{index}}'>
+   </file-list>
 </view>
 
 <view class='footer'>

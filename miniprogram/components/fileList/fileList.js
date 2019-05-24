@@ -66,6 +66,10 @@ Component({
       }
     },
 
+    setSelected:function(param){
+      this.setData({checked:param});
+    },
+
     closePop: function () {
       this.setData({ showPop: false });
     },

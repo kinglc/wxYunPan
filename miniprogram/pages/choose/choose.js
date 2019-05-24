@@ -135,6 +135,23 @@ Page({
     }
   },
 
+  selectall:function(){
+    var flag;
+    if(this.data.files.length==app.globalData.multiLen){
+      flag = false;
+      app.globalData.multiLen=0;
+    }
+    else{
+      flag = true;
+      app.globalData.multiLen = this.data.files.length;
+    }
+    for(var i = 0;i<this.data.files.length;i++){
+      this.myComponent = this.selectComponent('#myCom'+i);
+      this.myComponent.setSelected(flag);
+    }
+    this.changeNum();
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -168,7 +185,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
   },
 
   /**
