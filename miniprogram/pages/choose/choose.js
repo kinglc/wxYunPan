@@ -75,11 +75,18 @@ Page({
     }
   },
 
-  showShare:function(){
-    this.setData({
-      showShare:true,
-    });
-    
+  showShare: function () {
+    if (app.globalData.multiLen > 0 && app.globalData.multiLen < 20) {
+      this.setData({
+        showShare: true,
+      });
+    }
+    else {
+      wx.showToast({
+        title: '请选择1-20个文件',
+        icon: 'none',
+      })
+    }    
   },
 
   closeShare: function () {
@@ -99,12 +106,7 @@ Page({
   },
 
   share:function(){
-    if (app.globalData.multiLen == 0 || app.globalData.multiLen >20) {
-      wx.showToast({
-        title: '请选择1-20个文件',
-      });
-    }
-    else if (this.data.shareName == '') {
+  if (this.data.shareName == '') {
       wx.showToast({
         title: '请输入分享组名',
         icon: 'none',
@@ -154,10 +156,18 @@ Page({
   },
 
   setPersonal: function () {
-    this.setData({ 
-      pub: false,
-      showShare:true, 
-  });
+    if(app.globalData.multiLen>0&&app.globalData.multiLen<20){
+      this.setData({ 
+        pub: false,
+        showShare:true, 
+      });
+    }
+    else{
+      wx.showToast({
+        title: '请选择1-20个文件',
+        icon:'none',
+      })
+    }
   },
 
   selectall:function(){
