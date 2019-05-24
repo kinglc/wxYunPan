@@ -93,6 +93,13 @@ Page({
         title: '请选择1-20个文件',
       });
     }
+    else if (this.data.shareName == '') {
+      wx.showToast({
+        title: '请输入分享组名',
+        icon: 'none',
+        });
+      this.showShare();
+    }
     else{
       var fileIds=[];
       var that = this;

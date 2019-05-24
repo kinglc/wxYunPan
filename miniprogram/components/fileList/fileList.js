@@ -84,13 +84,22 @@ Component({
     },
 
     rename: function (e) {
-      var that = this;
-      var newname = that.data.newName + '.' + this.data.file.filename.split('.')[1];
-      directory.rename({
-        fileId: that.data.file._id,
-        filename: newname
-      });
-      that.setData({ filename: newname });
+      if (this.data.newName == '') {
+        wx.showToast({
+          title: '请输入名称',
+          icon: 'none',
+        });
+        this.showRename();
+      }
+      else{
+        var that = this;
+        var newname = that.data.newName + '.' + this.data.file.filename.split('.')[1];
+        directory.rename({
+          fileId: that.data.file._id,
+          filename: newname
+        });
+        that.setData({ filename: newname });
+      }
     },
 
     delete:function(){
