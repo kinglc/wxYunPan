@@ -51,9 +51,11 @@ const page = new Page({
                 avatarUrl: res.userInfo.avatarUrl,
                 userInfo: res.userInfo
               })
-            }
+            },
+            fail:console.log,
           })
         }
+        else console.log('你个渣渣');
       }
     })
   },
@@ -69,7 +71,6 @@ const page = new Page({
   },
 
   onReachBottom(){
-    console.log('a');
     directory.fetch();
   },
 

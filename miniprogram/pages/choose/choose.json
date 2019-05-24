@@ -1,6 +1,7 @@
 {
   "usingComponents": {
+      "icon-info": "/components/iconInfo/iconInfo",
       "file-list": "/components/fileList/fileList"
   },
-  "navigationBarTitleText": "文件选择"
+  "navigationBarTitleText": "多选"
 }

@@ -1,6 +1,5 @@
 /* components/iconInfo/iconInfo.wxss */
 .icon-info{
-  color:#A29F9F;
   font-size: 20px;
   margin-top: 10px;
 }

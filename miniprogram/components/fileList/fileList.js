@@ -1,6 +1,7 @@
 // components/fileList/fileList.js
 import DirectoryService from '../../service/directory_service.js'
 import FileService from '../../service/file_service.js'
+var app = getApp();
 
 const directory = new DirectoryService({
   onFileListChange :console.log,
@@ -48,7 +49,8 @@ Component({
     imgsrc:'../../images/file.png',
     show:true,
     showSelect:false,
-    createTime:''
+    createTime:'',
+    checked:false,
   },
 
   /**
@@ -110,38 +112,64 @@ Component({
       })
     },
 
-    funfile:function(){
-      if(this.dataset.type=='select'){
-        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    onChange: function (e) {
+      this.setData({
+        checked: e.detail
+      });
+      console.log(this.dataset.index);
+      if (this.data.checked == true) {
+        app.globalData.multiId[this.dataset.index] = true;
+        app.globalData.multiLen++;
       }
-      else{
+      else {
+        app.globalData.multiId[this.dataset.index] = false;
+        app.globalData.multiLen--;
+      }
+      this.triggerEvent('changeNum');
+    },
+
+    funfile:function(){
+      if(this.dataset.type=='history'){
+        //////////////////////
+      }
+      else if(this.dataset.type=='pop'){
         this.preview();
       }
     },
 
     preview:function(){
       var that=this;
+      // console.log(that.data.file.cloudpath);
       fs.preview({
-        path:that.data.file.cloudPath,
-        success:(res)=>{console.log(res)},
-        fail: (res) => { console.log(res) }
+        path:that.data.file.cloudpath,
+        success:(res)=>{
+          console.log(res);
+          },
+        fail: (res) => { 
+          console.log(res); 
+          wx.showToast({
+            icon: 'none',
+            title: res.errMsg,
+          })}
       })
     },
 
-    download:function(){
-      var that = this;
-      fs.downloadFile({
-        cloudpath:'cloud://wxyunpan-936858.7778-wxyunpan-936858/0d398854-edcf-49b3-8425-f6b815a2dde7.png',
-        success:(res)=>{
-          console.log(res);
-          wx.showToast("下载成功！");
-        },
-        fail: (res) => {
-          console.log(res);
-          wx.showToast("下载失败！")
-        },
-      })
-  }
+  //   download:function(){
+  //     var that = this;
+  //     fs.downloadFile({
+  //       cloudpath:that.data.file.cloudpath,
+  //       success:(res)=>{
+  //         console.log(res);
+  //         wx.showToast("下载成功！");
+  //         that.closePop();
+  //       },
+  //       fail: (res) => {
+  //         console.log(res);
+  //         wx.showToast("下载失败！");
+  //         that.closePop();
+  //       },
+  //     })
+  // }
 
   }
 })

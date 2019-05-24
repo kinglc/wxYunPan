@@ -3,13 +3,13 @@
   <van-row>
     <van-col span="4" offset="1"><image src="{{avatarUrl}}" size="35px" /></van-col>
     <van-col span="3" offset="9" bindtap="turn" data-url='history'>
-        <icon-info name='clock' info='浏览历史'></icon-info>
+        <icon-info name='clock' info='浏览历史' data-color='#A29F9F'></icon-info>
     </van-col>
     <van-col span="3" offset="1" bindtap="update">
-        <icon-info name='add' info='上传'></icon-info> 
+        <icon-info name='add' info='上传' data-color='#A29F9F'></icon-info> 
     </van-col>
     <van-col span="3" bindtap="turn" data-url='choose'>
-        <icon-info name='checked' info='选择'></icon-info>
+        <icon-info name='checked' info='选择' data-color='#A29F9F'></icon-info>
     </van-col>
   </van-row>  
 </view>
@@ -20,8 +20,8 @@
 
 <view class='footer'>
   <van-row>
-    <van-col span="8" ><van-button type='info' bindtap="turn" data-url='index'>我的文件</van-button></van-col>
-    <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='share'>我的分享</van-button></van-col>
-    <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='search'><van-icon name="search" size='30px'></van-icon></van-button></van-col>
+    <van-col span="8" ><van-button type='info' bindtap="turn" data-url='index' square>我的文件</van-button></van-col>
+    <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='share' square>我的分享</van-button></van-col>
+    <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='search' square><van-icon name="search" size='30px'></van-icon></van-button></van-col>
   </van-row>
 </view>

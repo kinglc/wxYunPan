@@ -14,5 +14,7 @@ App({
 
   globalData:{
     myfile:[],
+    multiId:[],
+    multiLen:0,
   }
 })

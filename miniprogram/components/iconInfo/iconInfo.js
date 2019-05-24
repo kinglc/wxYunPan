@@ -18,7 +18,11 @@ Component({
    * 组件的初始数据
    */
   data: {
+    
+  },
 
+  attached(){
+    this.setData({ color: this.dataset.color});
   },
 
   /**

@@ -1,9 +1,39 @@
 <!--miniprogram/pages/choose/choose.wxml-->
+<view class='header'>
+  <van-row>
+    <van-col style='color:#A29F9F;font-size:18px;' span='6' bindtap='turn'>取消</van-col>
+    <van-col span='12'>已选中{{len}}个文件</van-col>
+    <van-col style='color:#1989FA;font-size:18px;' span='6' bindtap='select-all'>全选</van-col>
+  </van-row>
+</view>
 
-<!-- <file-list wx:for="{{files}}" file="{{item}}" data-type="select" wx:key="{{index}}"></file-list> -->
-  <!-- <van-radio name="2" clickable disabled='false' abel-disabled='false'>单选框 2</van-radio> -->
-  <van-cell-group>
-    <van-cell title="单选框 1" clickable data-name="1" bind:click="onClick">
-      <van-radio name="1" bind:click="onClick" />
-    </van-cell>
-    </van-cell-group>
+<view class='files'>
+  <file-list wx:for="{{files}}" bind:changeNum="changeNum" data-index="{{index}}" file="{{item}}" data-type="select" wx:key="{{index}}" data-select='{{all}}'></file-list>
+</view>
+
+<view class='footer'>
+  <van-row>
+    <van-col span="8" offset="4">
+      <icon-info bindtap='delete' name='delete' info='删除' data-color='white'></icon-info>
+    </van-col>
+    <van-col span="5" >
+      <icon-info bindtap='showShare' name='share' info='共享' data-color='white'></icon-info>
+    </van-col>
+  </van-row>
+</view>
+
+  <van-dialog
+    use-slot
+    show="{{ showShare }}"
+    show-cancel-button
+    show-comfirm-button
+    bind:close="closeShare"
+    bind:confirm="share"
+    bind:cancel="closeShare"
+  >
+  <view class='sharebox'>
+    <view>分享</view>
+    <input placeholder='请命名' bindinput='input1'></input>
+    <input placeholder='请输入描述' bindinput='input2'></input>
+  </view>
+  </van-dialog>

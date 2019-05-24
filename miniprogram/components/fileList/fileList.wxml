@@ -7,7 +7,9 @@
         <view class='name'>{{filename}}</view>
         <view class='time'>{{createTime}}</view>
       </van-col>
-      <van-col wx:if='{{showSelect}}' span=''> <van-radio name="1" /></van-col>
+      <van-col wx:if='{{showSelect}}' span=''>
+        <van-checkbox value="{{ checked }}" bind:change="onChange"></van-checkbox>
+      </van-col>
     </van-row>
   </view>
 
@@ -21,8 +23,8 @@
   >
     <view class='btns'>
       <view class='btn' bindtap = 'showRename' style='color:#1989FA;border-radius:5px 5px 0 0;'>重命名</view>
-      <view class='btn' bindtap = 'delete' style='color:red;'>删除</view>
-      <view class='btn' bindtap = 'download' style='border-radius:0 0 5px 5px;'>下载</view>
+      <view class='btn' bindtap = 'delete' style='color:red;border-radius:0 0 5px 5px;'>删除</view>
+      <!-- <view class='btn' bindtap = 'download' style='border-radius:0 0 5px 5px;'>下载</view> -->
       <view class='btn' bindtap = 'closePop'style='color:gray;margin-top:10px;border-radius:5px;'>取消</view>
     </view>
   </van-popup>
