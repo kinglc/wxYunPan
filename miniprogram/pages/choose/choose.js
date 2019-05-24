@@ -24,6 +24,9 @@ Page({
     showShare:false,
     shareName:'',
     shareRemark:'',
+    pub:true,
+    shareId:'',
+    showPersonal:false,
   },
 
   turn: function () {
@@ -72,7 +75,10 @@ Page({
   },
 
   showShare:function(){
-    this.setData({showShare:true});
+    this.setData({
+      showShare:true,
+    });
+    
   },
 
   closeShare: function () {
@@ -115,24 +121,38 @@ Page({
         fileIds:fileIds,
         name:that.data.shareName,
         remark:that.data.shareRemark,
-        pub:true,
+        pub:that.data.pub,
         success:function(res){
           console.log(res);
-          wx.showToast({
-            title: '分享成功',
-          });
-          wx.redirectTo({
-            url: '../../pages/share/share',
-          })          
+          that.setData({shareId:res._id});
+          if(that.data.pub==true){
+            wx.showToast({
+              title: '分享成功',
+            });
+            wx.redirectTo({
+              url: '../../pages/share/share',
+            })    
+          }
+          else {
+            that.setData({showPersonal:true});
+          }
         },
         fail:function(res){
           console.log(res);
           wx.showToast({
             title: '分享失败',
+            icon:'none',
           })
         }
       })
     }
+  },
+
+  setPersonal: function () {
+    this.setData({ 
+      pub: false,
+      showShare:true, 
+  });
   },
 
   selectall:function(){
@@ -150,6 +170,21 @@ Page({
       this.myComponent.setSelected(flag);
     }
     this.changeNum();
+  },
+
+  onShareAppMessage: function (res) {
+    var that = this;
+    return {
+      title: '您的好友给您分享文件',
+      path: 'pages/comment/comment?shareId=' + that.data.shareId,
+      imageUrl: 'logo.png',
+      success: (res) => {
+        console.log(res);
+      },
+      fail: (res) => {
+        console.log(res);
+      }
+    };
   },
 
   /**
@@ -176,6 +211,10 @@ Page({
       onFail: console.log,
     });
   }, 
+
+  personal:function(){
+
+  },
   
   onReachBottom() {
     directory.fetch();
@@ -221,11 +260,4 @@ Page({
   onReachBottom: function () {
     directory.fetch();
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

@@ -21,11 +21,14 @@
 
 <view class='footer'>
   <van-row>
-    <van-col span="8" offset="4">
+    <van-col span="8">
       <icon-info bindtap='delete' name='delete' info='删除' data-color='white'></icon-info>
     </van-col>
-    <van-col span="5" >
+    <van-col span="8" >
       <icon-info bindtap='showShare' name='share' info='共享' data-color='white'></icon-info>
+    </van-col>
+    <van-col span="8" >
+      <icon-info bindtap='setPersonal' name='friends' info='私密分享' data-color='white'></icon-info>
     </van-col>
   </van-row>
 </view>
@@ -45,3 +48,25 @@
     <input placeholder='请输入描述' bindinput='input2'></input>
   </view>
   </van-dialog>
+
+  <!-- <van-dialog
+    use-slot
+    show="{{ showPersonal }}"
+    show-comfirm-button
+    bind:confirmButtonOpenType="show-message-card:true"
+  >
+    <view class='sharebox' style='text-align:center;padding:10px;'>
+      链接已生成，请选择好友
+    </view>
+  </van-dialog> -->
+
+
+  <!-- <view
+    show="{{ showPersonal }}"
+  >
+    <view class='sharebox' style='text-align:center;padding:10px;'>
+      链接已生成，请选择好友
+    </view>
+    <button open-type='share'>确定</button>
+  </view> -->
+  <!-- <Message-box> -->

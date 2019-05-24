@@ -14,6 +14,7 @@ const page = new Page({
     takeSession: false,
     requestResult: '',
     files:[],
+    noauth:true,
   },
 
   onLoad: function () {
@@ -43,6 +44,7 @@ const page = new Page({
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
+          // that.setData({ noauth:false});
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
@@ -55,8 +57,8 @@ const page = new Page({
             fail:console.log,
           })
         }
-        else console.log('你个渣渣');
-      }
+      },
+      fail:console.log,
     })
   },
 
@@ -68,6 +70,7 @@ const page = new Page({
         userInfo: e.detail.userInfo
       })
     }
+    this.setData({noauth:false});
   },
 
   onReachBottom(){
@@ -83,7 +86,7 @@ const page = new Page({
   },
 
   upfile: function (res) {
-    var time = res.tempFiles.length*400;
+    var time = res.tempFiles.length*500;
     for (var i = 0; i < res.tempFiles.length; i++) {
       var path = res.tempFiles[i].path;
       console.log(path);
