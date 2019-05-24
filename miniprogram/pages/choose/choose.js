@@ -27,6 +27,7 @@ Page({
     pub:true,
     shareId:'',
     showPersonal:false,
+    con:false,
   },
 
   turn: function () {
@@ -85,6 +86,10 @@ Page({
     this.setData({ showShare: false });
   },
 
+  closePersonal:function(){
+    this.setData({showPersonal:false});
+  },
+
   input1: function (e) {
     this.setData({ shareName: e.detail.value });
   },
@@ -122,7 +127,7 @@ Page({
         name:that.data.shareName,
         remark:that.data.shareRemark,
         pub:that.data.pub,
-        success:function(res){
+        success: function (res) {
           console.log(res);
           that.setData({shareId:res._id});
           if(that.data.pub==true){
@@ -174,6 +179,9 @@ Page({
 
   onShareAppMessage: function (res) {
     var that = this;
+    wx.redirectTo({
+      url: '../../pages/share/share',
+    })
     return {
       title: '您的好友给您分享文件',
       path: 'pages/comment/comment?shareId=' + that.data.shareId,
@@ -211,10 +219,6 @@ Page({
       onFail: console.log,
     });
   }, 
-
-  personal:function(){
-
-  },
   
   onReachBottom() {
     directory.fetch();

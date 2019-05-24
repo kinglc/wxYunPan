@@ -49,24 +49,13 @@
   </view>
   </van-dialog>
 
-  <!-- <van-dialog
-    use-slot
-    show="{{ showPersonal }}"
-    show-comfirm-button
-    bind:confirmButtonOpenType="show-message-card:true"
-  >
-    <view class='sharebox' style='text-align:center;padding:10px;'>
-      链接已生成，请选择好友
-    </view>
-  </van-dialog> -->
-
-
-  <!-- <view
-    show="{{ showPersonal }}"
-  >
-    <view class='sharebox' style='text-align:center;padding:10px;'>
-      链接已生成，请选择好友
-    </view>
-    <button open-type='share'>确定</button>
-  </view> -->
-  <!-- <Message-box> -->
+  <van-dialog
+  use-slot
+  show="{{ showPersonal }}"
+  bind:close="closePersonal"
+  bind:getuserinfo="getUserInfo"
+  showConfirmButton='{{con}}'
+>
+  <view class='dialogt'>链接已生成，请选择好友</view>
+  <button open-type='share' class='sharebutton'>分享</button>
+</van-dialog>
