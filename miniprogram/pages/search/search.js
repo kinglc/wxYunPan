@@ -1,7 +1,10 @@
 // miniprogram/pages/search/search.js
 import SearchService from '../../service/search_service.js'
 const app = getApp();
-var service;
+var service = new SearchService({
+  onShareListChange: () => { },
+  onFail: () => { }
+});
 Page({
 
   /**
@@ -21,7 +24,7 @@ Page({
       { _id :1, 
         files: [{ _id :1, filename: "文件1", isImage: false, size: 1, cloudpath: "www"}, 
          { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }], 
-        createTime: 18888888,
+        time: 18888888,
         name:"第一个分享", 
         remark:"分享说明", 
         nickname:"分享人",
@@ -33,7 +36,7 @@ Page({
         _id: 2,
         files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
         { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
-        createTime: 18888888,
+        time: 18888888,
         name: "第二个分享",
         remark: "分享说明",
         nickname: "分享人",
@@ -45,7 +48,7 @@ Page({
         _id: 3,
         files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
           { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
-        createTime: 18888888,
+        time: 18888888,
         name: "第二个分享",
         remark: "分享说明",
         nickname: "分享人",
@@ -85,10 +88,11 @@ Page({
     service = new SearchService({
       onShareListChange: (shareInfo) => {
           // var tmp=[];
-          for(var i=0;i<shareInfo.length;i++){
-            shareInfo[i]["createTime"] = formatDate(shareInfo[i]["createTime"]);
+          // for(var i=0;i<shareInfo.length;i++){
+          //   shareInfo[i]["createTime"] = formatDate(shareInfo[i]["createTime"]);
             // tmp[i]=false;
-          }
+          // }
+          console.log(shareInfo)
           this.setData({
             list: shareInfo,
             // select: tmp

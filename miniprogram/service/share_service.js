@@ -165,8 +165,8 @@ export default class ShareService {
           pub,
           name,
           remark,
-          nickname: res.userInfo.nickname,
-          avatar: res.userInfo.avatar,
+          nickname: res.userInfo.nickName,
+          avatar: res.userInfo.avatarUrl,
           comment: 0,
           score: 0
         }
