@@ -114,12 +114,12 @@ Page({
       comment: that.data.value,
       score: that.myComponent.getScore(),
     });
+    comment.fetch();    
     setTimeout(function(){
-      comment.fetch();    
       wx.redirectTo({
         url: '../comment/comment?shareId=' + that.data.shareId,
       })
-    }, 1000);
+    }, 3000);
   },
 
   onReachBottom(){
