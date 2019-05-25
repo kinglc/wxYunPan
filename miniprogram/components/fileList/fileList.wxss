@@ -5,6 +5,8 @@
   /* overflow: hidden; */
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E3E3E3;
 }
 
 image{

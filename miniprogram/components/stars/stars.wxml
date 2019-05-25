@@ -1,0 +1,8 @@
+<!--components/stars/stars.wxml-->
+<view class='stars'>
+  <van-icon name='star' size='{{size}}' color="{{colors[0]}}" class="star" bindtap="changeColor" data-pt='1'></van-icon>
+  <van-icon name='star' size='{{size}}' color="{{colors[1]}}" class="star" bindtap="changeColor" data-pt='2'></van-icon>
+  <van-icon name='star' size='{{size}}' color="{{colors[2]}}" class="star" bindtap="changeColor" data-pt='3'></van-icon>
+  <van-icon name='star' size='{{size}}' color="{{colors[3]}}" class="star" bindtap="changeColor" data-pt='4'></van-icon>
+  <van-icon name='star' size='{{size}}' color="{{colors[4]}}" class="star" bindtap="changeColor" data-pt='5'></van-icon>
+</view>

@@ -1,36 +1,79 @@
-/* .header{
-  padding-top:10px; 
-  padding-bottom: 10px;
-  border: 1px solid #c8c8c8;
-  display: flex;
-  justify-content: center;
-  font-size: 16px;
-  color:#0ca6e9;
-} */
-.file{
-  margin: 10px;
+.share{
+  padding:10px;
+  border: 2px solid #EDECE8;
 }
 
-.file image{
+.file{
+  width: 90%;
+  margin: 0 auto;
+  padding-bottom: 10px;
+}
+
+.file>image{
     height: 70px;
     width: 60px;
     margin: 0 auto;
     display: flex;
 }
 
-.file view{
+.file>view{
     font-size: 14px;
     color: #f79414;
-    /* display: flex; */  
     margin: 0 auto;
     text-align: center;
 }
 
-.comments{
-    width: 100%;
-    height: 390px;
-    border: 1px solid #c8c8c8;
+.download{  
+  position: absolute;
+  margin-left: 70%;
 }
+
+.download view{
+  text-align:center;
+  color:#1989FA;
+  font-weight:bold;
+  margin-top:-8px;
+}
+
+.download image{
+  width: 50px;
+  height: 50px;
+}
+
+.files{
+  width: 90%;
+  margin:0 auto;
+  margin-bottom:10px;
+  padding-top:10px;
+  padding-bottom:10px;
+  background-color: rgba(237, 236, 232, 0.482);
+  /* border: 2px solid #EDECE8; */
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+
+.write{
+  border: 2px solid #dcdee7;
+  padding-top:20px;
+}
+
+textarea{
+  width: 90%;
+  margin-left:5%;
+  margin-top:5px;
+  margin-bottom:5px;
+  border:2px #c3c3c3 solid;
+}
+
+
+
+
+
 
 .yourComment{
     width: 100%;
@@ -38,6 +81,7 @@
     border: 1px solid #c8c8c8;
     position: fixed;
     bottom: 0px;
+    background-color: white;
 }
 
 .commentBtn{
@@ -48,6 +92,7 @@
 .userAvatar{
     width: 50px;
     height: 50px;
+    border-radius: 50%;
 }
 
 .userName{
@@ -56,19 +101,22 @@
     padding-left: 7px;
 }
 
-.aComment{
+.comment{
     width: 100%;
-    height: 130px;
+    height: 245px;
     border: 1px solid #c8c8c8;
+    padding-top:10px;
 }
 
-.commentTitle{
-    font-size: 17px;
+.comments{
+  margin-bottom: 50px;
 }
 
-.commentContent{
-    font-size: 14px;
-    color: gray;
+.content{
+    font-size: 16px;
+    margin:10px;
+    height: 165px;
+    border: 1px solid #e6e6e6;
 }
 
 

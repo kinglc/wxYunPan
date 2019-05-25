@@ -21,6 +21,9 @@
 function getUserInfo(){
   return new Promise((success,fail)=>{
     wx.getUserInfo({
+      withCredentials
+    });
+    wx.getUserInfo({
       success,
       fail
     })
@@ -165,8 +168,8 @@ export default class ShareService {
           pub,
           name,
           remark,
-          nickname: res.userInfo.nickname,
-          avatar: res.userInfo.avatar,
+          nickname: res.userInfo.nickName,
+          avatar: res.userInfo.avatarUrl,
           comment: 0,
           score: 0
         }

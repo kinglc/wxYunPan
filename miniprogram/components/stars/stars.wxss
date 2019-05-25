@@ -1,0 +1,9 @@
+/* components/stars/stars.wxss */
+.stars{
+  display: flex;
+  flex-direction: row;
+  margin-left: 40px;
+}
+.star{
+  margin-left:5px;
+}

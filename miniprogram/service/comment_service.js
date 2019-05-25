@@ -228,15 +228,15 @@ export default class CommentService {
       shareId:this._shareId,
     }).orderBy('createTime', 'desc')
     .get().then(res=>{
-      for(var i of res){
-        i.time = formatDate(createTime);
+      for(var i of res.data){
+        i.time = formatDate(i.createTime);
       }
       this._data = this._getData().concat(res.data);
       this._fetching = false;
       this._dataChanged();
     }).catch(res=>{
       this._fetching = false;
-      onFail(res);
+      this.onFail(res);
     })
   }
 }

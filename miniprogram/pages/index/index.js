@@ -54,11 +54,21 @@ const page = new Page({
                 userInfo: res.userInfo
               })
             },
-            fail:console.log,
+            fail: function (res) {
+              console.log(res);
+              wx.showToast({
+                title: '网络错误，请稍后重试',
+              })
+            }
           })
         }
       },
-      fail:console.log,
+      fail:function(res){
+        console.log(res);
+        wx.showToast({
+          title: '网络错误，请稍后重试',
+        })
+      }
     })
   },
 

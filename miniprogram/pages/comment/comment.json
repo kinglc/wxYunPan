@@ -1,4 +1,7 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "评价"
+  "usingComponents": {
+    "file-list": "/components/fileList/fileList",
+    "stars": "../../components/stars/stars"
+    },
+  "navigationBarTitleText": "评论"
 } 

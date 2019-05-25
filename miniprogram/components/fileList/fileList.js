@@ -145,7 +145,7 @@ Component({
       if(this.dataset.type=='history'){
         //////////////////////
       }
-      else if(this.dataset.type=='pop'){
+      else if (this.dataset.type == 'pop' || this.dataset.type == 'comment'){
         this.preview();
       }
     },

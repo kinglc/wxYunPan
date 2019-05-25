@@ -1,37 +1,42 @@
 <!--miniprogram/pages/comment/comment.wxml-->
-<!-- <view class='header'>
-    <van-row>
-        <van-col><text>娃哈哈</text></van-col>
-    </van-row>
-</view> -->
 
-<view class='file'>
-  <image src='{{imgsrc}}' mode='aspectFit'></image>
-  <view>{{share.score}}</view>
+<view class='share'>
+  <view class='file'>
+    <view class='download' bindtap='download'> 
+      <image src='../../images/save.png' mode='aspectFit'></image>
+      <view>保存</view>
+    </view>
+    <image src='../../images/folder.png' mode='aspectFit'></image>
+    <view style='color:black;font-size:16px;'>{{share.name}}</view>
+    <view style='color:gray;'>{{share.remark}}</view>
+    <view>评分：{{share.score}}</view>
+  </view>
+
+  <scroll-view scroll-y="true" style="height: 130px;" class='files'>
+    <file-list wx:for="{{share.files}}" file="{{item}}" data-type="comment" wx:key="{{index}}"></file-list>
+  </scroll-view>
 </view>
 
-<view class="comments">
-    <block wx:for="{{commentArray}}">
-    <view class='aComment'>
+<view class='comments'>
+    <block wx:for="{{comments}}">
+    <view class='comment'>
         <van-row>
             <van-col offset="1" span="4">
                 <view style='padding-top:30px;justify-content:center;'>
-                    <image class="userAvatar" src='{{item}}'></image>
+                    <image class="userAvatar" src='{{item.avatar}}'></image>
                 </view>
                 <view style='justify-content:center;'>
-                    <text class='userName'>用户1</text>
+                    <text class='userName'>{{item.nickname}}</text>
                 </view>
             </van-col>
 
-            <van-col>
-                <view style='padding-top:20px;' >
-                    <text class='commentTitle'>标题</text>
+            <van-col span="19">
+                <stars data-score="{{item.score}}" data-type="read"></stars>
+                <view class='content' >
+                    <text>{{item.comment}}</text>
                 </view>
-                <view>
-                    <text class='commentContent'>注意评论过长单行溢出...</text>      </view>
-                <view style='position:fixed;padding-top:30px;'>
-                    <text class='commentScore'>5分</text>
-                    <text class='commentTime'>2019-04-16</text>
+                <view class='time'>
+                    <text class='commentTime'>{{item.time}}</text>
                 </view>
             </van-col>
         </van-row>
@@ -43,7 +48,23 @@
     <van-row>
         <view style='padding-top:10px;'>
             <van-col offset="4"><text style='font-size:16px;'>评价</text></van-col>
-            <van-col offset='1'><button class='commentBtn' plain='true' bindtap='writeComment'>写下你的评论...</button></van-col>
+            <van-col offset='1'>
+              <button class='commentBtn' plain='true' bindtap='showWrite'>写下你的评论...</button>
+            </van-col>
         </view>
     </van-row>
 </view>
+
+<van-popup
+  show="{{ showWrite }}"
+  position="bottom"
+  overlay="true"
+  bind:close="closeWrite"
+  close-on-click-overlay="true"
+>
+  <view class='write'>
+    <stars id='score' data-score="0" data-type="write"></stars>
+    <textarea maxlength="150"  value="{{value}}" bindinput='input' placeholder='请输入150字以内评论'></textarea>
+  </view>
+  <van-button type='info' size="large" bindtap="submit">提交</van-button>
+</van-popup>
