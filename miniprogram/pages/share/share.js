@@ -1,6 +1,10 @@
 // miniprogram/pages/share/share.js
 import ShareService from '../../service/share_service.js'
-var service = null;
+const app = getApp();
+var service = new ShareService({
+  onShareListChange:() => { },
+  onFail:() => { }
+});
 Page({
 
   /**
@@ -13,46 +17,46 @@ Page({
     radio: 0,
 
     list: [
-      {
-        _id: 1,
-        files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
-        { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
-        createTime: 18888888,
-        name: "第一个分享",
-        remark: "分享说明",
-        nickname: "分享人",
-        avatar: "../../images/user-unlogin.png",
-        comment: 8,
-        score: 5,
-        pub:false,
-        pub_color:""
-      },
-      {
-        _id: 2,
-        files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
-        { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
-        createTime: 18888888,
-        name: "第二个分享",
-        remark: "分享说明",
-        nickname: "分享人",
-        avatar: "../../images/user-unlogin.png",
-        comment: 8,
-        score: 5,
-        pub:true
-      },
-      {
-        _id: 3,
-        files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
-        { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
-        createTime: 18888888,
-        name: "第二个分享",
-        remark: "分享说明",
-        nickname: "分享人",
-        avatar: "../../images/user-unlogin.png",
-        comment: 8,
-        score: 5,
-        pub:false
-      }
+      // {
+      //   _id: 1,
+      //   files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
+      //   { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
+      //   createTime: 18888888,
+      //   name: "第一个分享",
+      //   remark: "分享说明",
+      //   nickname: "分享人",
+      //   avatar: "../../images/user-unlogin.png",
+      //   comment: 8,
+      //   score: 5,
+      //   pub:false,
+      //   pub_color:""
+      // },
+      // {
+      //   _id: 2,
+      //   files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
+      //   { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
+      //   createTime: 18888888,
+      //   name: "第二个分享",
+      //   remark: "分享说明",
+      //   nickname: "分享人",
+      //   avatar: "../../images/user-unlogin.png",
+      //   comment: 8,
+      //   score: 5,
+      //   pub:true
+      // },
+      // {
+      //   _id: 3,
+      //   files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
+      //   { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
+      //   createTime: 18888888,
+      //   name: "第二个分享",
+      //   remark: "分享说明",
+      //   nickname: "分享人",
+      //   avatar: "../../images/user-unlogin.png",
+      //   comment: 8,
+      //   score: 5,
+      //   pub:false
+      // }
     ],
 
   },
@@ -120,15 +124,17 @@ Page({
   onLoad: function (options) {
     service = new ShareService({
       onShareListChange: (shareInfo) => {
-        for (var i = 0; i < shareInfo.length; i++) {
-          shareInfo[i]["createTime"] = formatDate(shareInfo[i]["createTime"]);
-        }
+        // for (var i = 0; i < shareInfo.length; i++) {
+          // shareInfo[i]["createTime"] = formatDate(shareInfo[i]["createTime"]);
+        // }
+        console.log(shareInfo)
         this.setData({
-          // list: shareInfo,
-          // select: tmp
+          list: shareInfo
         });
       },
-      onFail: () => { }
+      onFail: (a) => {
+        console.log(a)
+       }
     });
     service.fetch();
   },

@@ -29,8 +29,8 @@
                     </van-col>
                   </van-row>
                   <van-row>
-                    <van-col span="12">
-                      <text style='font-size:0.8rem;color:#a3a3a3'>{{item.createTime}}</text>
+                    <van-col>
+                      <text style='font-size:0.8rem;color:#a3a3a3'>{{item.time}}</text>
                     </van-col>
                   </van-row>
             </view>
@@ -59,8 +59,8 @@
                       </van-col>
                     </van-row>
                     <van-row>
-                      <van-col span="17">
-                        <text style='font-size:0.8rem;color:#a3a3a3'>{{item.createTime}}</text>
+                      <van-col>
+                        <text style='font-size:0.8rem;color:#a3a3a3'>{{item.time}}</text>
                       </van-col>
                     </van-row>
               </view>
