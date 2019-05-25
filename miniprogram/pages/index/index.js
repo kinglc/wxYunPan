@@ -58,6 +58,7 @@ const page = new Page({
               console.log(res);
               wx.showToast({
                 title: '网络错误，请稍后重试',
+                icon:'none',
               })
             }
           })
@@ -67,6 +68,7 @@ const page = new Page({
         console.log(res);
         wx.showToast({
           title: '网络错误，请稍后重试',
+          icon: 'none',
         })
       }
     })
