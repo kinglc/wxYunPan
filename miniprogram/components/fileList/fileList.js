@@ -23,7 +23,6 @@ Component({
   },
 
   attached(){
-    var suffix = this.data.file.filename.split('.')[1];
     this.setData({
       filename:this.data.file.filename,
       createTime:this.data.file.time,
@@ -113,10 +112,7 @@ Component({
         content: '确定删除此文件？',
         success(res) {
           if (res.confirm) {
-            if(that.dataset.type=="delete"){
-              fs.remove(that.data.file.historyId);
-            }
-            else if(that.dataset.type=="pop"){
+            if(that.dataset.type=="pop"){
               directory.remove(that.data.file._id);
             }
             that.setData({show:false});

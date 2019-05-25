@@ -21,9 +21,6 @@
 function getUserInfo(){
   return new Promise((success,fail)=>{
     wx.getUserInfo({
-      withCredentials
-    });
-    wx.getUserInfo({
       success,
       fail
     })

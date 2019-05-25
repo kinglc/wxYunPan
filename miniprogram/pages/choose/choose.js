@@ -76,7 +76,7 @@ Page({
   },
 
   showShare: function () {
-    if (app.globalData.multiLen > 0 && app.globalData.multiLen < 20) {
+    if (app.globalData.multiLen > 0 && app.globalData.multiLen <= 20) {
       this.setData({
         showShare: true,
       });

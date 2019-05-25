@@ -21,41 +21,41 @@ Page({
     // select: [false,false,false],
     
     list:[
-      { _id :1, 
-        files: [{ _id :1, filename: "文件1", isImage: false, size: 1, cloudpath: "www"}, 
-         { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }], 
-        time: 18888888,
-        name:"第一个分享", 
-        remark:"分享说明", 
-        nickname:"分享人",
-        avatar:"../../images/user-unlogin.png",
-        comment : 8,
-        score : 5
-      },
-      {
-        _id: 2,
-        files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
-        { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
-        time: 18888888,
-        name: "第二个分享",
-        remark: "分享说明",
-        nickname: "分享人",
-        avatar: "../../images/user-unlogin.png",
-        comment: 8,
-        score: 5
-      },
-      {
-        _id: 3,
-        files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
-          { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
-        time: 18888888,
-        name: "第二个分享",
-        remark: "分享说明",
-        nickname: "分享人",
-        avatar: "../../images/user-unlogin.png",
-        comment: 8,
-        score: 5
-      }
+      // { _id :1, 
+      //   files: [{ _id :1, filename: "文件1", isImage: false, size: 1, cloudpath: "www"}, 
+      //    { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }], 
+      //   time: 18888888,
+      //   name:"第一个分享", 
+      //   remark:"分享说明", 
+      //   nickname:"分享人",
+      //   avatar:"../../images/user-unlogin.png",
+      //   comment : 8,
+      //   score : 5
+      // },
+      // {
+      //   _id: 2,
+      //   files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
+      //   { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
+      //   time: 18888888,
+      //   name: "第二个分享",
+      //   remark: "分享说明",
+      //   nickname: "分享人",
+      //   avatar: "../../images/user-unlogin.png",
+      //   comment: 8,
+      //   score: 5
+      // },
+      // {
+      //   _id: 3,
+      //   files: [{ _id: 1, filename: "文件1", isImage: false, size: 1, cloudpath: "www" },
+      //     { _id: 2, filename: "文件2", isImage: false, size: 1, cloudpath: "www" }],
+      //   time: 18888888,
+      //   name: "第二个分享",
+      //   remark: "分享说明",
+      //   nickname: "分享人",
+      //   avatar: "../../images/user-unlogin.png",
+      //   comment: 8,
+      //   score: 5
+      // }
     ],
   },
   

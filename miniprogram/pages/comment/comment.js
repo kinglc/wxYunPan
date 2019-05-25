@@ -2,11 +2,7 @@
 import CommentService from '../../service/comment_service.js'
 import ShareService from '../../service/share_service.js'
 import FileService from '../../service/file_service.js'
-var comment = new CommentService({
-  shareId: '',
-  onCommentListChange: () => {},
-  onFail: () => {}
-});
+var comment = null;
 Page({
 
   /**
@@ -41,6 +37,7 @@ Page({
         console.log(res);
       }
     });
+    console.log('hh here');
     comment = new CommentService({
       shareId: that.data.shareId,
       onCommentListChange:(res) => {
@@ -49,6 +46,10 @@ Page({
        },
       onFail:(res) => {
         console.log(res);
+        wx.showToast({
+          title: res.errMsg,
+          icon:'none',
+        })
        }
     });
     comment.fetch();
@@ -100,12 +101,6 @@ Page({
     this.setData({ showWrite: false });
   },
 
-  /**用户点击写评论按钮 */
-  writeComment:function(e){
-      wx.navigateTo({
-          url: '../writeComment/writeComment?shareId='+this.data.shareId,
-      })
-  },
 
   input:function(e){
     this.setData({ value: e.detail.value});
@@ -119,9 +114,15 @@ Page({
       comment: that.data.value,
       score: that.myComponent.getScore(),
     });
-    comment.fetch();
-    wx.redirectTo({
-      url: '../writeComment/writeComment?shareId=' + this.data.shareId,
-    })
+    setTimeout(function(){
+      comment.fetch();    
+      wx.redirectTo({
+        url: '../comment/comment?shareId=' + that.data.shareId,
+      })
+    }, 1000);
   },
+
+  onReachBottom(){
+    comment.fetch();
+  }
 })

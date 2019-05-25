@@ -26,7 +26,7 @@
     <van-row>
       <van-col span="8" ><van-button type='info' bindtap="turn" data-url='index' square>我的文件</van-button></van-col>
       <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='share' square>我的分享</van-button></van-col>
-      <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='comment' square><van-icon name="search" size='30px'></van-icon></van-button></van-col>
+      <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='search' square><van-icon name="search" size='30px'></van-icon></van-button></van-col>
     </van-row>
   </view>
 </view>
