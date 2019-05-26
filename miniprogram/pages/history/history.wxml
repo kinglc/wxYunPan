@@ -5,7 +5,7 @@
        <view class='aFile' bindtap='delete' data-id="{{item._id}}">
         <van-row>
             <van-col offset="1" span="3" class='usrImage' >
-                <image src="../../images/file.png" mode='aspectFit' class='avatar'></image>
+                <image src="../../images/folder.png" mode='aspectFit' class='avatar'></image>
             </van-col>
             <van-col offset="1" span="18">
             <view style='padding-top:10px;'>
@@ -14,8 +14,8 @@
                       <text style='font-size:1rem;color:black;'>{{item.name}}</text>
                     </van-col>
                     <van-col offset="2">
-                      <van-tag wx:if="{{item.pub==true}}" round color="#ffc20e" size="medium">共享</van-tag>
-                      <van-tag wx:else round color="#006c54" size="medium">私密</van-tag>
+                      <!-- <van-tag wx:if="{{item.pub==true}}" round color="#ffc20e" size="medium">共享</van-tag>
+                      <van-tag wx:else round color="#006c54" size="medium">私密</van-tag> -->
                     </van-col>
                   </van-row>
                   <van-row>

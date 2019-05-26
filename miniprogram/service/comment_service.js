@@ -93,7 +93,8 @@ export default class CommentService {
           avatar:res.data.avatar,
           nickname:res.data.nickname,
           name:res.data.name,
-          remark:res.data.remark
+          remark:res.data.remark,
+          pub:res.data.pub
         }
       })
     }).catch(console.log);
