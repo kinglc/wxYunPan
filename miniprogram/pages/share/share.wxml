@@ -15,7 +15,7 @@
        <view class='aFile' bindtap='turn' data-id="{{item._id}}">
         <van-row>
             <van-col offset="1" span="3" class='usrImage' >
-                <image src="../../images/file.png" mode='aspectFit' class='avatar'></image>
+                <image src="../../images/folder.png" mode='aspectFit' class='avatar'></image>
             </van-col>
             <van-col offset="1" span="18">
             <view style='padding-top:10px;'>

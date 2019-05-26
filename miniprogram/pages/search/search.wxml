@@ -26,7 +26,7 @@
             <view style='padding-top:10px;'>
                   <van-row>
                     <van-col>
-                      <image src="../../images/file.png" mode='aspectFit' class='fileImage'></image>
+                      <image src="../../images/folder.png" mode='aspectFit' class='fileImage'></image>
                     </van-col>
                     <van-col offset="1">
                       <text style='font-size:1rem;color:black;'>{{item.name}}</text>
