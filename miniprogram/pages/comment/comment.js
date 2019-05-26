@@ -14,6 +14,7 @@ Page({
     comments:[],
     showWrite:false,
     value:'',
+    avgscore:0,
   },
 
   /**
@@ -31,7 +32,14 @@ Page({
         if (tmp.remark==""){
           tmp.remark='暂无描述';
         }
-        that.setData({ share: tmp });
+        var score = tmp.score/tmp.comment;
+        console.log(score);
+        score = score.toFixed(1);
+        console.log(score);
+        that.setData({
+           share: tmp,
+           avgscore:score,
+        });
       },
       fail: function (res) {
         console.log(res);

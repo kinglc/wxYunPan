@@ -9,7 +9,7 @@
     <image src='../../images/folder.png' mode='aspectFit'></image>
     <view style='color:black;font-size:16px;'>{{share.name}}</view>
     <view style='color:gray;'>{{share.remark}}</view>
-    <view>评分：{{share.score}}</view>
+    <view>评分：{{avgscore}}</view>
   </view>
 
   <scroll-view scroll-y="true" style="height: 130px;" class='files'>
