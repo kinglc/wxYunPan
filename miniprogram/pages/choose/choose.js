@@ -122,7 +122,10 @@ Page({
     this.setData({ shareRemark: e.detail.value });
   },
 
-  share: function () {
+  share:function () {
+    wx.showLoading({
+      title: '生成分享中',
+    })
     if (this.data.shareName == '') {
       wx.showToast({
         title: '请输入分享组名',
@@ -142,7 +145,7 @@ Page({
           app.globalData.multiId[i] == false;
         }
       }
-      new Promise((resolve,fail)=>{
+      new Promise((success,fail)=>{
         share.share({
           fileIds: fileIds,
           name: that.data.shareName,
@@ -150,13 +153,18 @@ Page({
           pub: that.data.pub,
           success: function (res) {
             console.log(res);
-            that.setData({ shareId: res._id });
             that.setData({
+              shareId: res._id,
               shareName: '',
               shareRemark: '',
             });
             if (that.data.pub == true) {
-              resolve(res);
+              wx.showToast({
+                title: '分享成功',
+              });
+              wx.redirectTo({
+                url: '../../pages/share/share',
+              })
             }
             else {
               that.setData({ showPersonal: true });
@@ -170,15 +178,8 @@ Page({
             })
           }
         });
-        }).then((res)=>{
-          wx.showToast({
-            title: '分享成功',
-          });
-          wx.redirectTo({
-            url: '../../pages/share/share',
-          })
       });
-      }
+    }
   },
 
   setPersonal: function () {
