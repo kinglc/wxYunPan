@@ -59,11 +59,12 @@ Page({
             new Promise((resolve,fail)=>{
               var cnt = 0;
               for (var i = 0; i < that.data.files.length && app.globalData.multiLen != 0; i++) {
-                if(app.globalData.multiId[i] == true) {
+                if (app.globalData.multiId[i] == true) {
                   directory.remove({
                     fileId:that.data.files[i]._id,
                     success:(res)=>{
                       console.log(res);
+                      console.log(app.globalData.multiId);
                       app.globalData.multiLen--;
                       app.globalData.multiId[i] == false;
                       cnt++;

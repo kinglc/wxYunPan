@@ -18,7 +18,7 @@
 </view>
 
 <view class='comments'>
-    <block wx:for="{{comments}}">
+    <block wx:for="{{comments}}" wx:key="_id">
     <view class='comment'>
         <van-row>
             <van-col offset="1" span="4">
@@ -69,4 +69,5 @@
     <textarea maxlength="150"  value="{{value}}" bindinput='input' placeholder='请输入150字以内评论'></textarea>
   </view>
   <van-button type='info' size="large" bindtap="submit">提交</van-button>
+  <view wx:if="true" style="width:350px;"></view>
 </van-popup>

@@ -24,35 +24,7 @@ Page({
     var that = this;
     that.setData({ shareId: options.shareId})   
     console.log('shareId:'+that.data.shareId);
-    ShareService.getShareInfo({
-      shareId:that.data.shareId,
-      success:function(res){
-        console.log(res);
-        var tmp = res.data;
-        if (tmp.remark==""){
-          tmp.remark='暂无描述';
-        }
-        if (tmp.comment == 0) {
-          that.setData({
-            share: tmp,
-            avgscore: 0,
-          });
-        }
-        else{
-          var score = tmp.score/tmp.comment;
-          console.log(score);
-          score = score.toFixed(1);
-          console.log(score);
-          that.setData({
-            share: tmp,
-            avgscore:score,
-          });
-        }
-      },
-      fail: function (res) {
-        console.log(res);
-      }
-    });
+    this.setScore();
     comment = new CommentService({
       shareId: that.data.shareId,
       onCommentListChange:(res) => {
@@ -68,6 +40,39 @@ Page({
        }
     });
     comment.fetch();
+  },
+
+  setScore:function(){
+    var that = this;
+    ShareService.getShareInfo({
+      shareId: that.data.shareId,
+      success: function (res) {
+        console.log(res);
+        var tmp = res.data;
+        if (tmp.remark == "") {
+          tmp.remark = '暂无描述';
+        }
+        if (tmp.comment == 0) {
+          that.setData({
+            share: tmp,
+            avgscore: 0,
+          });
+        }
+        else {
+          var score = tmp.score / tmp.comment;
+          console.log(score);
+          score = score.toFixed(1);
+          console.log(score);
+          that.setData({
+            share: tmp,
+            avgscore: score,
+          });
+        }
+      },
+      fail: function (res) {
+        console.log(res);
+      }
+    });
   },
 
   /**
@@ -126,6 +131,7 @@ Page({
 
   input:function(e){
     this.setData({ value: e.detail.value});
+
   },
 
   submit:function(){
@@ -147,7 +153,8 @@ Page({
           showWrite:false,
           score:0,
           value:'',
-        })
+        });
+        this.setScore();
     }
   },
 
