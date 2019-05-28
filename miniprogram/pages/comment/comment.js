@@ -79,32 +79,39 @@ Page({
 
   download:function(){
     var files = this.data.share.files;
-    for(var i = 0;i<files.length;i++){
-        comment.save({
-          fileId:files[i]._id,
-          success:function(res){
-            console.log(res);
-            wx.showLoading({
-              title: '保存中',
-            })
-            setTimeout(function () {
+    console.log(files);
+    var cnt = 0;
+    wx.showLoading({
+      title: '保存中',
+    });
+    new Promise((resolve,fail)=>{
+      for(var i = 0;i<files.length;i++){
+          comment.save({
+            file:files[i],
+            success:function(res){
+              console.log(res);
+              cnt++;
+              if(cnt==files.length){
+                resolve(res);
+              }
+            },
+            fail: function (res) {
+              console.log(res);
               wx.showToast({
-                title: '保存成功',
+                title: res.errMsg,
+                icon:'none',
               })
-              wx.redirectTo({
-                url: '../../pages/index/index',
-              })
-            }, files.length * 500);
-          },
-          fail: function (res) {
-            console.log(res);
-            wx.showToast({
-              title: res,
-              icon:'none',
-            })
-          },
-      })
+            },
+        })
     };
+    }).then((res)=>{
+      wx.showToast({
+        title: '保存成功',
+      })
+      wx.redirectTo({
+        url: '../../pages/index/index',
+      })
+    });
   
   },
 
@@ -125,26 +132,15 @@ Page({
     this.myComponent = this.selectComponent('#score');
     var that = this;
     console.log(that.data.value);
-    new Promise(function(resolve,reject){
       comment.comment({
         comment: that.data.value,
         score: that.myComponent.getScore(),
       });
-      resolve();
-    }).then(()=>{
       this.setData({
-        comments:[],
         showWrite:false,
         score:0,
         value:'',
       })
-      this.onLoad(); 
-    }).catch(()=>{
-      wx.showToast({
-        title: '评论失败',
-        icon:'none',
-      })
-    })
   },
 
   onReachBottom(){

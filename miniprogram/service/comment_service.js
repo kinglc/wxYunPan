@@ -122,29 +122,25 @@ export default class CommentService {
   /**
    * 保存单个目标文件至我的目录，多个请使用多次
    * @param {Object} options
-   * @param {string} options.fileId - 待保存的文件ID
+   * @param {Object} options.file - 待保存的文件信息
    * @param {function} options.success - 成功回调
    * @param {function} options.fail - 失败回调
    */
   save({
-    fileId,
+    file,
     success,
     fail
   }){
     const db = wx.cloud.database();
     const filedb = db.collection('file');
-    filedb.doc(fileId)
-    .get().then(res=>{
-      console.log(res);
-      return filedb.add({
+    filedb.add({
         data:{
-        filename:res.data.filename,
-        cloudpath:res.data.cloudpath,
-        isImage:res.data.isImage,
+        filename:file.filename,
+          cloudpath: file.cloudpath,
+          isImage:file.isImage,
         createTime:db.serverDate(),
-        size:res.data.size
+          size: file.size
         }
-      })
     }).then((res)=>{
       success(res);
     }).catch(res=>{
@@ -176,6 +172,7 @@ export default class CommentService {
     const db = wx.cloud.database();
     const _ = db.command;
     const commentdb = db.collection('comment');
+    let commentId = null;
 
     getUserInfo().then(res=>{
       return commentdb.add({
@@ -189,6 +186,8 @@ export default class CommentService {
         }
       })   
     }).then(res=>{
+      console.log(res)
+      commentId = res._id;
       const sharedb = db.collection('share');
       return sharedb.doc(this._shareId).update({
         data: {
@@ -197,7 +196,7 @@ export default class CommentService {
         }
       })
     }).then(res=>{
-      return commentdb.doc(res._id).get() 
+      return commentdb.doc(commentId).get() 
     }).then(res=>{
       let data = this._getData();
       res.data.time = formatDate(res.data.createTime);

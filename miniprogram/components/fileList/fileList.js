@@ -163,19 +163,25 @@ Component({
 
     preview:function(){
       var that=this;
-      // console.log(that.data.file.cloudpath);
-      fs.preview({
-        path:that.data.file.cloudpath,
-        success:(res)=>{
-          console.log(res);
-          },
-        fail: (res) => { 
-          console.log(res); 
-          wx.showToast({
-            icon: 'none',
-            title: res.errMsg,
-          })}
-      })
+      if(that.data.file.filename.split(".")[1]=="mp4"){
+        wx.navigateTo({
+          url: '../../pages/video/video?src='+that.data.file.cloudpath,
+        })
+      }
+      else{
+        fs.preview({
+          path:that.data.file.cloudpath,
+          success:(res)=>{
+            console.log(res);
+            },
+          fail: (res) => { 
+            console.log(res); 
+            wx.showToast({
+              icon: 'none',
+              title: res.errMsg,
+            })}
+        })
+      }
     },
 
   //   download:function(){

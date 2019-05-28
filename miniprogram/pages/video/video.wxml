@@ -1,0 +1,2 @@
+<!--miniprogram/pages/video/video.wxml-->
+<video id='myvideo' src='{{src}}' show-fullscreen-btn='false' autoplay='true'></video>

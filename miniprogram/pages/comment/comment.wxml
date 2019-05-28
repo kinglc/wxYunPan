@@ -13,7 +13,7 @@
   </view>
 
   <scroll-view scroll-y="true" style="height: 130px;" class='files'>
-    <file-list wx:for="{{share.files}}" file="{{item}}" data-type="comment" wx:key="{{index}}"></file-list>
+    <file-list wx:for="{{share.files}}" file="{{item}}" data-type="comment" wx:key="_id"></file-list>
   </scroll-view>
 </view>
 
@@ -51,7 +51,7 @@
               <button class='commentBtn' plain='true' bindtap='showWrite'>写下你的评论...</button>
             </van-col>
             <van-col offset='2' span='3'>
-              <image src='../../images/save.png' mode='aspectFit' style="margin-top:-5px;"></image>
+              <image bindtap='download' src='../../images/save.png' mode='aspectFit' style="margin-top:-5px;"></image>
             </van-col>
         </view>
     </van-row>
