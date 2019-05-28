@@ -14,7 +14,7 @@ Page({
     value: '',
     choose: true,
     active: 0,
-    radio: 0,
+    radio: -1,
 
     list: [
       // {
@@ -104,10 +104,23 @@ Page({
       path: 'pages/comment/comment?shareId=' + this.data.radio,
       imageUrl: this.data.list[this.data.radio]["avatar"],
       success: (res) => {
-        console.log("分享成功", res);
+        if (res.errMsg == 'shareAppMessage:ok') {
+          wx.showToast({
+            title: '分享成功',
+          });
+        }
       },
       fail: (res) => {
-        console.log("分享失败", res);
+        // 转发失败之后的回调
+        if (res.errMsg == 'shareAppMessage:fail cancel') {
+          wx.showToast({
+            title: '已取消转发',
+          });
+        } else if (res.errMsg == 'shareAppMessage:fail') {
+          wx.showToast({
+            title: '分享失败',
+          });
+        }
       }
     }
   },

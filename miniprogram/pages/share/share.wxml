@@ -71,7 +71,7 @@
         </van-row>
     </van-radio-group>
     <!-- tabbar -->
-    <view class='footer'>
+    <view class='footer' wx:if="{{radio>=0}}">
       <van-row>
         <van-col offset="2" span="10" >
           <van-button type='info' bindtap="onCancel">取消分享</van-button>
