@@ -14,9 +14,6 @@ const page = new Page({
   },
 
   onLoad: function () {
-    var that = this;
-   
-
     if (!wx.cloud) {
       wx.redirectTo({
         url: '../chooseLib/chooseLib',
