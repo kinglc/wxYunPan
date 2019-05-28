@@ -42,6 +42,7 @@ Page({
     if (app.globalData.multiLen == 0) {
       wx.showToast({
         title: '请选择文件',
+        icon:'none',
       });
     }
     else {
