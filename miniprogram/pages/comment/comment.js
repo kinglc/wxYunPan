@@ -134,6 +134,7 @@ Page({
     if (that.data.value == '' ||that.myComponent.getScore==0){
       wx.showToast({
         title: '请输入内容或评分',
+        icon:'none',
       })
     }
     else{
