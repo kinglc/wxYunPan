@@ -32,6 +32,7 @@
 .sharebox{
   padding: 20px;
   z-index:1000;
+  margin-top:-20px;
 }
 
 .sharebox view{

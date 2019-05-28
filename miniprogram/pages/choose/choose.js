@@ -30,13 +30,6 @@ Page({
     con: false,
   },
 
-  onShow(){
-    app.globalData.multiLen = 0;
-    for(var i = 0;i<this.files.length;i++){
-      app.globalData.multiId[i]=false;
-    }
-  },
-
   turn: function () {
     wx.navigateBack();
   },
@@ -65,10 +58,7 @@ Page({
             new Promise((resolve,fail)=>{
               var cnt = 0;
               for (var i = 0; i < that.data.files.length && app.globalData.multiLen != 0; i++) {
-                if (typeof (app.globalData.multiId[i] == undefined)){
-                  continue;
-                }
-                else if(app.globalData.multiId[i] == true) {
+                if(app.globalData.multiId[i] == true) {
                   directory.remove({
                     fileId:that.data.files[i]._id,
                     success:(res)=>{
@@ -265,6 +255,14 @@ Page({
       },
       onFail: console.log,
     });
+  },
+
+  onShow() {
+    app.globalData.multiLen = 0;
+    for (var i = 0; i < this.data.files.length; i++) {
+      app.globalData.multiId[i] = false;
+    }
+    console.log(app.globalData.multiId);
   },
 
   onReachBottom() {

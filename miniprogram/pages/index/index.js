@@ -140,7 +140,7 @@ const page = new Page({
           this.upfile(r);
         }).catch((r) => {
           wx.showToast({
-            title: '上传失败，请检查网络',
+            title: '上传失败',
             icon:'none'
           })
           console.log('Failed: ' + r);
