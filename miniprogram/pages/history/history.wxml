@@ -19,8 +19,11 @@
                     </van-col>
                   </van-row>
                   <van-row>
-                    <van-col>
+                    <van-col span="14">
                       <text style='font-size:0.8rem;color:#a3a3a3'>{{item.time}}</text>
+                    </van-col>
+                    <van-col offset="1">
+                      <text style='font-size:0.8rem;color:#a3a3a3'>{{item.nickname}}</text>
                     </van-col>
                   </van-row>
             </view>

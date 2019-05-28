@@ -19,7 +19,6 @@ Page({
     //   active: '../../images/save-cloud.png'
     // },
     // select: [false,false,false],
-    
     list:[
       // { _id :1, 
       //   files: [{ _id :1, filename: "文件1", isImage: false, size: 1, cloudpath: "www"}, 
