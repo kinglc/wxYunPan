@@ -230,6 +230,10 @@ Page({
         console.log(res);
       },
       fail: (res) => {
+        wx.showToast({
+          title: res.errMsg,
+          icon:'none',
+        })
         console.log(res);
       }
     };

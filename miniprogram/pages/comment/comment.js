@@ -29,7 +29,8 @@ Page({
       shareId: that.data.shareId,
       onCommentListChange:(res) => {
         console.log(res);
-        that.setData({comments:res})
+        that.setData({ comments: res });
+        this.setScore();
        },
       onFail:(res) => {
         console.log(res);
@@ -70,6 +71,10 @@ Page({
         }
       },
       fail: function (res) {
+        wx.showToast({
+          title: res.errMsg,
+          icon:'none',
+        })
         console.log(res);
       }
     });
@@ -154,7 +159,6 @@ Page({
           score:0,
           value:'',
         });
-        this.setScore();
     }
   },
 

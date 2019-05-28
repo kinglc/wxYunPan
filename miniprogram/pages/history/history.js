@@ -23,7 +23,11 @@ Page({
           that.setData({ files: res });
         },
         onFail: (res) => {
-          console.log('res'); 
+          console.log('res');
+          wx.showToast({
+            title: res.errMsg,
+            icon: 'none',
+          })
           }
       });
       fs.fetch();

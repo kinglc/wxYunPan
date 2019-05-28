@@ -112,7 +112,10 @@ const page = new Page({
           },
           fail:(res)=>{
             console.log(res);
-            reject("");
+            wx.showToast({
+              title: res.errMsg,
+              icon:'none',
+            })
           }
         });
       }
