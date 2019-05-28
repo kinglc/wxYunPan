@@ -158,10 +158,10 @@ Page({
               shareName: '',
               shareRemark: '',
             });
+            wx.showToast({
+              title: '分享成功',
+            });
             if (that.data.pub == true) {
-              wx.showToast({
-                title: '分享成功',
-              });
               wx.redirectTo({
                 url: '../../pages/share/share',
               })
