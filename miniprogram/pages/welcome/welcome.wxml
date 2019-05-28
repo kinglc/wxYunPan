@@ -1,0 +1,4 @@
+<!--miniprogram/pages/welcome/welcome.wxml-->
+<view class='auth'>
+  <button open-type='getUserInfo' bindgetuserinfo="onGetUserInfo">点击获取授权信息</button>
+</view>

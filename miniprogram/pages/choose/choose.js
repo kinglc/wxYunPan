@@ -9,8 +9,8 @@ var directory = new DirectoryService({
   onFail: () => { }
 });
 var share = new ShareService({
-  onShareListChange:() => { },
-  onFail:() => { }
+  onShareListChange: () => { },
+  onFail: () => { }
 });
 
 Page({
@@ -19,29 +19,34 @@ Page({
    * 页面的初始数据
    */
   data: {
-    files:[],
-    len:app.globalData.multiLen,
-    showShare:false,
-    shareName:'',
-    shareRemark:'',
-    pub:true,
-    shareId:'',
-    showPersonal:false,
-    con:false,
+    files: [],
+    len: app.globalData.multiLen,
+    showShare: false,
+    shareName: '',
+    shareRemark: '',
+    pub: true,
+    shareId: '',
+    showPersonal: false,
+    con: false,
+  },
+
+  onShow(){
+    app.globalData.multiLen = 0;
+    for(var i = 0;i<this.files.length;i++){
+      app.globalData.multiId[i]=false;
+    }
   },
 
   turn: function () {
-    wx.redirectTo({
-      url: '../../pages/index/index',
-    })
+    wx.navigateBack();
   },
 
-  changeNum:function(){
-    this.setData({len:app.globalData.multiLen});
+  changeNum: function () {
+    this.setData({ len: app.globalData.multiLen });
   },
-  
+
   delete: function () {
-    if(app.globalData.multiLen==0){
+    if (app.globalData.multiLen == 0) {
       wx.showToast({
         title: '请选择文件',
       });
@@ -51,24 +56,46 @@ Page({
       console.log(app.globalData.multiId);
       wx.showModal({
         title: '提示',
-        content: '确定删除这'+app.globalData.multiLen+'项文件？',
+        content: '确定删除这' + app.globalData.multiLen + '项文件？',
         success(res) {
           if (res.confirm) {
-            for (var i = 0; i < that.data.files.length && app.globalData.multiLen!=0; i++) {
-              if (app.globalData.multiId[i] == true) {
-                console.log('a');
-                app.globalData.multiLen--;
-                directory.remove(that.data.files[i]._id);
+            wx.showLoading({
+              title: '删除中',
+            })
+            new Promise((resolve,fail)=>{
+              var cnt = 0;
+              for (var i = 0; i < that.data.files.length && app.globalData.multiLen != 0; i++) {
+                if (typeof (app.globalData.multiId[i] == undefined)){
+                  continue;
+                }
+                else if(app.globalData.multiId[i] == true) {
+                  directory.remove({
+                    fileId:that.data.files[i]._id,
+                    success:(res)=>{
+                      console.log(res);
+                      app.globalData.multiLen--;
+                      app.globalData.multiId[i] == false;
+                      cnt++;
+                      if(cnt==app.globalData.multiLen){
+                        resolve(res);
+                      }
+                    },
+                    fail:(res)=>{
+                      console.log(res);
+                      wx.showToast({
+                        title: res.errMsg,
+                        icon:'none',
+                      })
+                    }
+                  });
+                }
               }
-            }
-            setTimeout(function(){
+            }).then((res)=>{
               wx.showToast({
                 title: '删除成功',
               });
-              wx.redirectTo({
-                url: '../../pages/index/index',
-              })
-            },app.globalData.multiLen*500);
+              wx.navigateBack();
+            })
           }
         }
       })
@@ -86,15 +113,15 @@ Page({
         title: '请选择1-20个文件',
         icon: 'none',
       })
-    }    
+    }
   },
 
   closeShare: function () {
     this.setData({ showShare: false });
   },
 
-  closePersonal:function(){
-    this.setData({showPersonal:false});
+  closePersonal: function () {
+    this.setData({ showPersonal: false });
   },
 
   input1: function (e) {
@@ -105,88 +132,94 @@ Page({
     this.setData({ shareRemark: e.detail.value });
   },
 
-  share:function(){
-  if (this.data.shareName == '') {
+  share: function () {
+    if (this.data.shareName == '') {
       wx.showToast({
         title: '请输入分享组名',
         icon: 'none',
-        });
+      });
       this.showShare();
     }
-    else{
-      var fileIds=[];
+    else {
+      var fileIds = [];
       var that = this;
       var j = 0;
       for (var i = 0; i < that.data.files.length; i++) {
         if (app.globalData.multiId[i] == true) {
           console.log(that.data.files[i]._id);
-          fileIds[j]=that.data.files[i]._id;
+          fileIds[j] = that.data.files[i]._id;
           j++;
+          app.globalData.multiId[i] == false;
         }
       }
-      share.share({
-        fileIds:fileIds,
-        name:that.data.shareName,
-        remark:that.data.shareRemark,
-        pub:that.data.pub,
-        success: function (res) {
-          console.log(res);
-          that.setData({shareId:res._id});
-          that.setData({
-            shareName:'',
-            shareRemark:'',
-          });
-          if(that.data.pub==true){
-            wx.showToast({
-              title: '分享成功',
+      new Promise((resolve,fail)=>{
+        share.share({
+          fileIds: fileIds,
+          name: that.data.shareName,
+          remark: that.data.shareRemark,
+          pub: that.data.pub,
+          success: function (res) {
+            console.log(res);
+            that.setData({ shareId: res._id });
+            that.setData({
+              shareName: '',
+              shareRemark: '',
             });
-            wx.redirectTo({
-              url: '../../pages/share/share',
-            })    
+            if (that.data.pub == true) {
+              resolve(res);
+            }
+            else {
+              that.setData({ showPersonal: true });
+            }
+          },
+          fail: function (res) {
+            console.log(res);
+            wx.showToast({
+              title: '分享失败',
+              icon: 'none',
+            })
           }
-          else {
-            that.setData({showPersonal:true});
-          }
-        },
-        fail:function(res){
-          console.log(res);
+        });
+        }).then((res)=>{
           wx.showToast({
-            title: '分享失败',
-            icon:'none',
+            title: '分享成功',
+          });
+          wx.redirectTo({
+            url: '../../pages/share/share',
           })
-        }
-      })
-    }
+      });
+      }
   },
 
   setPersonal: function () {
-    if(app.globalData.multiLen>0&&app.globalData.multiLen<20){
-      this.setData({ 
+    if (app.globalData.multiLen > 0 && app.globalData.multiLen <= 20) {
+      this.setData({
         pub: false,
-        showShare:true, 
+        showShare: true,
       });
     }
-    else{
+    else {
       wx.showToast({
         title: '请选择1-20个文件',
-        icon:'none',
+        icon: 'none',
       })
     }
   },
 
-  selectall:function(){
+  selectall: function () {
     var flag;
-    if(this.data.files.length==app.globalData.multiLen){
+    if (this.data.files.length == app.globalData.multiLen) {
       flag = false;
-      app.globalData.multiLen=0;
+      app.globalData.multiLen = 0;
     }
-    else{
+    else {
       flag = true;
       app.globalData.multiLen = this.data.files.length;
     }
-    for(var i = 0;i<this.data.files.length;i++){
-      this.myComponent = this.selectComponent('#myCom'+i);
+    for (var i = 0; i < this.data.files.length; i++) {
+      this.myComponent = this.selectComponent('#myCom' + i);
       this.myComponent.setSelected(flag);
+      app.globalData.multiId[i]=flag;
     }
     this.changeNum();
   },
@@ -214,7 +247,7 @@ Page({
    */
   onLoad: function () {
     this.setData({
-      files:app.globalData.myfile,
+      files: app.globalData.myfile,
     })
     console.log(this.data.files);
     var that = this;
@@ -232,8 +265,8 @@ Page({
       },
       onFail: console.log,
     });
-  }, 
-  
+  },
+
   onReachBottom() {
     directory.fetch();
   },

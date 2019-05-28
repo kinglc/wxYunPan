@@ -2,10 +2,10 @@
 
 <view class='share'>
   <view class='file'>
-    <view class='download' bindtap='download'> 
+    <!-- <view class='download' bindtap='download'> 
       <image src='../../images/save.png' mode='aspectFit'></image>
       <view>保存</view>
-    </view>
+    </view> -->
     <image src='../../images/folder.png' mode='aspectFit'></image>
     <view style='color:black;font-size:16px;'>{{share.name}}</view>
     <view style='color:gray;'>{{share.remark}}</view>
@@ -47,9 +47,11 @@
 <view class='yourComment'>
     <van-row>
         <view style='padding-top:10px;'>
-            <van-col offset="4"><text style='font-size:16px;'>评价</text></van-col>
-            <van-col offset='1'>
+            <van-col offset='7' span='10'>
               <button class='commentBtn' plain='true' bindtap='showWrite'>写下你的评论...</button>
+            </van-col>
+            <van-col offset='2' span='3'>
+              <image src='../../images/save.png' mode='aspectFit' style="margin-top:-5px;"></image>
             </van-col>
         </view>
     </van-row>

@@ -23,23 +23,6 @@
     text-align: center;
 }
 
-.download{  
-  position: absolute;
-  margin-left: 70%;
-}
-
-.download view{
-  text-align:center;
-  color:#1989FA;
-  font-weight:bold;
-  margin-top:-8px;
-}
-
-.download image{
-  width: 50px;
-  height: 50px;
-}
-
 .files{
   width: 90%;
   margin:0 auto;
@@ -86,7 +69,7 @@ textarea{
 
 .commentBtn{
     font-size:13px;
-    width: 200px;
+    /* width: 200px; */
 }
 
 .userAvatar{

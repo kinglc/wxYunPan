@@ -1,8 +1,4 @@
 <!--index.wxml-->
-<view wx:if="{{noauth}}" class='auth'>
-  <button open-type='getUserInfo'>点击获取授权信息</button>
-</view>
-<view wx:else>
   <view class='header'>
     <van-row>
       <van-col span="4" offset="1"><image src="{{avatarUrl}}" size="35px" /></van-col>
@@ -19,7 +15,7 @@
   </view>
 
   <view class='files'>
-    <file-list wx:for="{{files}}" file="{{item}}" data-type="pop" wx:key="{{index}}"></file-list>
+    <file-list wx:for="{{files}}" file="{{item}}" data-type="pop" wx:key="_id"></file-list>
   </view>
 
   <view class='footer'>
@@ -29,4 +25,3 @@
       <van-col span="8"><van-button type='info' plain bindtap="turn" data-url='search' square><van-icon name="search" size='30px'></van-icon></van-button></van-col>
     </van-row>
   </view>
-</view>

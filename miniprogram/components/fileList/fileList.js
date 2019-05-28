@@ -113,7 +113,22 @@ Component({
         success(res) {
           if (res.confirm) {
             if(that.dataset.type=="pop"){
-              directory.remove(that.data.file._id);
+              directory.remove({
+                fileId:that.data.file._id,
+                success: function (res) {
+                  console.log(res);
+                  wx.showToast({
+                    title: '删除成功'
+                  })
+                },
+                fail:function(res){
+                  console.log(res);
+                  wx.showToast({
+                    title: res.errMsg,
+                    icon:'none'
+                  })
+                }
+                });
             }
             that.setData({show:false});
           } 
@@ -139,7 +154,7 @@ Component({
 
     funfile:function(){
       if(this.dataset.type=='history'){
-        //////////////////////
+        this.delete();
       }
       else if (this.dataset.type == 'pop' || this.dataset.type == 'comment'){
         this.preview();

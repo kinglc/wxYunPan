@@ -15,7 +15,7 @@
  */
 
 function is_image(suffix) {
-  let regex = /^.(jpg|jpeg|png|bmp|BMP|JPG|PNG|JPEG)$/
+  let regex = /^.(jpg|jpeg|png|bmp|gif)$/
   return regex.test(suffix.toLowerCase());
 }
 
@@ -200,7 +200,7 @@ export default class DirectoryService{
     }).orderBy('createTime','desc').get()
     .then(res=>{
       for(var i of res.data){
-        // console.log(i.createTime);
+        console.log(i.createTime);
         i.time = formatDate(i.createTime);
         // console.log(i.createTime.getFullYear()
         // +'-'+i.createTime.getMonth()+'-'+i.createTime.getDate())
@@ -217,9 +217,17 @@ export default class DirectoryService{
 
   /**
    * 用户删除自己的某项文件
-   * @param {string} fileId 待删除的文件ID
+   * @param {Object} options
+   * @param {string} options.fileId 待删除的文件ID
+   * @param {function} options.success - 成功回调
+   * @param {function} options.fail - 失败回调，会覆盖初始设置的onFail监听器
+
    */
-  remove( fileId ){
+  remove({ 
+    fileId,
+    success=null,
+    fail = null
+  }){
     const db = wx.cloud.database();
     const filedb = db.collection('file');
 
@@ -232,9 +240,10 @@ export default class DirectoryService{
           break;
         }
       }
+      success(res);
       this._fileChanged();
     })
-    .catch(this.onFail)
+    .catch(fail==null?this.onFail:fail)
   }
 
   /**
@@ -276,6 +285,8 @@ export default class DirectoryService{
     }).then(res=>{
       return filedb.doc(res._id).get();
     }).then(res=>{
+      res.data.time = formatDate(res.data.createTime);
+    
       this._getData().unshift(res.data);
       this._fileChanged();
       success(res);

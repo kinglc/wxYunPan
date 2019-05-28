@@ -32,20 +32,27 @@ Page({
         if (tmp.remark==""){
           tmp.remark='暂无描述';
         }
-        var score = tmp.score/tmp.comment;
-        console.log(score);
-        score = score.toFixed(1);
-        console.log(score);
-        that.setData({
-           share: tmp,
-           avgscore:score,
-        });
+        if (tmp.comment == 0) {
+          that.setData({
+            share: tmp,
+            avgscore: 0,
+          });
+        }
+        else{
+          var score = tmp.score/tmp.comment;
+          console.log(score);
+          score = score.toFixed(1);
+          console.log(score);
+          that.setData({
+            share: tmp,
+            avgscore:score,
+          });
+        }
       },
       fail: function (res) {
         console.log(res);
       }
     });
-    console.log('hh here');
     comment = new CommentService({
       shareId: that.data.shareId,
       onCommentListChange:(res) => {
@@ -118,16 +125,26 @@ Page({
     this.myComponent = this.selectComponent('#score');
     var that = this;
     console.log(that.data.value);
-    comment.comment({
-      comment: that.data.value,
-      score: that.myComponent.getScore(),
-    });
-    comment.fetch();    
-    setTimeout(function(){
-      wx.redirectTo({
-        url: '../comment/comment?shareId=' + that.data.shareId,
+    new Promise(function(resolve,reject){
+      comment.comment({
+        comment: that.data.value,
+        score: that.myComponent.getScore(),
+      });
+      resolve();
+    }).then(()=>{
+      this.setData({
+        comments:[],
+        showWrite:false,
+        score:0,
+        value:'',
       })
-    }, 3000);
+      this.onLoad(); 
+    }).catch(()=>{
+      wx.showToast({
+        title: '评论失败',
+        icon:'none',
+      })
+    })
   },
 
   onReachBottom(){

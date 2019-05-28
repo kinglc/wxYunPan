@@ -1,0 +1,6 @@
+/* miniprogram/pages/welcome/welcome.wxss */
+.auth{
+  width: 200px;
+  margin:0 auto;
+  margin-top:60%;
+}

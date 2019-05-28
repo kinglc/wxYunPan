@@ -2,10 +2,7 @@
 // let regeneratorRuntime = require("../../utils/regenerator-runtime/runtime");
 import DirectoryService from '../../service/directory_service.js'
 const app = getApp();
-var directory = new DirectoryService({
-  onFileListChange:() =>{},
-  onFail: () =>{}
-});
+var directory = null;
 const page = new Page({
   data: {
     avatarUrl: '../../images/user-unlogin.png',
@@ -14,24 +11,11 @@ const page = new Page({
     takeSession: false,
     requestResult: '',
     files:[],
-    noauth:true,
   },
 
   onLoad: function () {
-    // wx.navigateTo({
-    //   url: '../comment/comment',
-    // })
     var that = this;
-    directory = new DirectoryService({
-      onFileListChange: (res) => {
-        console.log(res);
-        that.setData({ files: res });
-      },
-      onFail: (res) => {
-        console.log(res);
-     }
-    });
-    directory.fetch();
+   
 
     if (!wx.cloud) {
       wx.redirectTo({
@@ -44,7 +28,6 @@ const page = new Page({
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
-          that.setData({ noauth:false});
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
@@ -63,8 +46,13 @@ const page = new Page({
             }
           })
         }
+        else {
+          wx.redirectTo({
+            url: '../../pages/welcome/welcome',
+          })
+        }
       },
-      fail:function(res){
+      fail:(res) => {
         console.log(res);
         wx.showToast({
           title: '网络错误，请稍后重试',
@@ -74,15 +62,18 @@ const page = new Page({
     })
   },
 
-  onGetUserInfo: function (e) {
-    if (!this.logged && e.detail.userInfo) {
-      this.setData({
-        logged: true,
-        avatarUrl: e.detail.userInfo.avatarUrl,
-        userInfo: e.detail.userInfo
-      })
-    }
-    this.setData({noauth:false});
+  onShow() {
+    directory = new DirectoryService({
+      onFileListChange: (res) => {
+        console.log(res);
+        this.setData({ files: res });
+        app.globalData.myfile = this.data.files;
+      },
+      onFail: (res) => {
+        console.log(res);
+      }
+    });
+    directory.fetch();
   },
 
   onReachBottom(){
@@ -91,54 +82,69 @@ const page = new Page({
 
   turn:function(e){
     var param = e.currentTarget.dataset.url;
-    app.globalData.myfile=this.data.files;
-    wx.navigateTo({
-        url: '../' + param + '/' + param
-    })
+    if(param=='index'){
+      this.onLoad();
+    }
+    else{
+      wx.navigateTo({
+          url: '../' + param + '/' + param
+      })
+    }
   },
 
-  upfile: function (res) {
-    var time = res.tempFiles.length*500;
-    for (var i = 0; i < res.tempFiles.length; i++) {
-      var path = res.tempFiles[i].path;
-      console.log(path);
-      directory.upload({
-        filePath: path,
-        success: function (res) {
-          console.log(res);
-        },
-        fail: function (res) {
-          console.log(res);
-        }
-      });
-    }
-    setTimeout(function () {
-      wx.navigateTo({
-        url: '../../pages/index/index',
-      });
+  upfile: function (r) {
+    console.log(r);
+    let cnt = 0;
+    wx.showLoading({
+      title: '上传中',
+    });
+    new Promise((resolve, reject) => {
+      for (var i = 0; i < r.tempFiles.length; i++) {
+        var path = r.tempFiles[i].path;
+        directory.upload({
+          filePath: path,
+          success:(res)=>{
+            console.log(res);
+            cnt++;
+            if(cnt==r.tempFiles.length){
+              console.log(path);
+              console.log(i);
+              resolve(res);
+            }
+          },
+          fail:(res)=>{
+            console.log(res);
+            reject("");
+          }
+        });
+      }
+    }).then((res) => {
       wx.showToast({
         title: '上传成功',
       });
-      },time)
+      // this.setData({files:[]});
+      // this.onLoad();
+    }).catch(console.log)
   },
 
-
   update:function(){
-    var that = this;
-    wx.chooseMessageFile({
-      count:10,
-      type:'all',
-      success(res){
-        console.log(res);
-        wx.showLoading({
-          title: '上传中',
+    new Promise((success, fail) => {
+            wx.chooseMessageFile({
+              count: 10,
+              type: 'all',
+              success,
+              fail,
+            });
+        }).then((r) => {
+          console.log('Done: ' + r);
+          this.upfile(r);
+        }).catch((r) => {
+          wx.showToast({
+            title: '上传失败，请检查网络',
+            icon:'none'
+          })
+          console.log('Failed: ' + r);
         });
-        setTimeout(that.upfile(res), 500);
-      },
-      fail(res){
-        console.log(res);
-      }
-    });
   }
 
 })
