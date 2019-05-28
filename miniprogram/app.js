@@ -16,5 +16,6 @@ App({
     myfile:[],
     multiId:[],
     multiLen:0,
+    usrId:'',
   }
 })

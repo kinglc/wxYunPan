@@ -36,6 +36,7 @@ const page = new Page({
                 avatarUrl: res.userInfo.avatarUrl,
                 userInfo: res.userInfo
               })
+              app.globalData.usrId = this.data.userInfo['nickName']
             },
             fail: function (res) {
               console.log(res);

@@ -100,7 +100,7 @@ Page({
     if (res.from === 'button') {
     }
     return {
-      title: '您的阿爸分享给你',
+      title: '❤来自好友'+app.globalData.usrId+'的分享❤',
       path: 'pages/comment/comment?shareId=' + this.data.radio,
       imageUrl: this.data.list[this.data.radio]["avatar"],
       success: (res) => {
