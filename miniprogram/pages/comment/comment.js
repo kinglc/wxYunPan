@@ -131,16 +131,23 @@ Page({
   submit:function(){
     this.myComponent = this.selectComponent('#score');
     var that = this;
-    console.log(that.data.value);
-      comment.comment({
-        comment: that.data.value,
-        score: that.myComponent.getScore(),
-      });
-      this.setData({
-        showWrite:false,
-        score:0,
-        value:'',
+    if (that.data.value == '' ||that.myComponent.getScore==0){
+      wx.showToast({
+        title: '请输入内容或评分',
       })
+    }
+    else{
+      console.log(that.data.value);
+        comment.comment({
+          comment: that.data.value,
+          score: that.myComponent.getScore(),
+        });
+        this.setData({
+          showWrite:false,
+          score:0,
+          value:'',
+        })
+    }
   },
 
   onReachBottom(){
