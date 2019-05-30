@@ -101,7 +101,7 @@ Page({
     }
     return {
       title: '❤来自好友'+app.globalData.usrId+'的分享❤',
-      path: 'pages/comment/comment?shareId=' + this.data.radio,
+      path: 'pages/comment/comment?shareId=' + this.data.list[this.data.radio]["_id"],
       imageUrl: this.data.list[this.data.radio]["avatar"],
       success: (res) => {
         if (res.errMsg == 'shareAppMessage:ok') {
