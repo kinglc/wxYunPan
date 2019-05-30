@@ -219,15 +219,15 @@ Page({
 
   onShareAppMessage: function (res) {
     var that = this;
-    wx.redirectTo({
-      url: '../../pages/share/share',
-    })
     return {
       title: '您的好友给您分享文件',
       path: 'pages/comment/comment?shareId=' + that.data.shareId,
       imageUrl: '../../images/logo.png',
       success: (res) => {
         console.log(res);
+        wx.redirectTo({
+          url: '../../pages/share/share',
+        })
       },
       fail: (res) => {
         wx.showToast({
