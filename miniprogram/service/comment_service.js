@@ -172,30 +172,35 @@ export default class CommentService {
     const db = wx.cloud.database();
     const _ = db.command;
     const commentdb = db.collection('comment');
+    
     let commentId = null;
 
+    
+
+
     getUserInfo().then(res=>{
-      return commentdb.add({
+      console.log({
         data: {
-          shareId: this._shareId,
+          avatarUrl: res.userInfo.avatarUrl,
+          nickName: res.userInfo.nickName,
           score,
           comment,
-          createTime: db.serverDate(),
-          avatar: res.userInfo.avatarUrl,
-          nickname: res.userInfo.nickName
-        }
-      })   
-    }).then(res=>{
-      console.log(res)
-      commentId = res._id;
-      const sharedb = db.collection('share');
-      return sharedb.doc(this._shareId).update({
+          shareId: this._shareId
+        }})
+      return wx.cloud.callFunction({
+        name: 'doComment',
         data: {
-          comment: _.inc(1),
-          score: _.inc(score)
+          avatarUrl:res.userInfo.avatarUrl,
+          nickName:res.userInfo.nickName,
+          score,
+          comment,
+          shareId:this._shareId
         }
       })
     }).then(res=>{
+      console.log(res)
+      commentId = res.result;
+      
       return commentdb.doc(commentId).get() 
     }).then(res=>{
       let data = this._getData();

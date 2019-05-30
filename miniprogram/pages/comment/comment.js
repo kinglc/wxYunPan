@@ -15,6 +15,7 @@ Page({
     showWrite:false,
     value:'',
     avgscore:0,
+    focus:false,
   },
 
   /**
@@ -133,10 +134,12 @@ Page({
     this.setData({ showWrite: false });
   },
 
+  changeFocus: function () {
+    this.setData({ focus: true });
+  },
 
   input:function(e){
     this.setData({ value: e.detail.value});
-
   },
 
   submit:function(){
@@ -157,7 +160,8 @@ Page({
         this.setData({
           showWrite:false,
           score:0,
-          value:'',
+          value: '',
+          focus: true,
         });
     }
   },

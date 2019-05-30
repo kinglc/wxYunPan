@@ -66,8 +66,8 @@
 >
   <view class='write'>
     <stars id='score' data-score="0" data-type="write"></stars>
-    <textarea maxlength="150"  value="{{value}}" bindinput='input' placeholder='请输入150字以内评论'></textarea>
+    <textarea maxlength="150"  focus='{{focus}}' bindtap='changeFocus' value="{{value}}" bindinput='input' placeholder='请输入150字以内评论'></textarea>
   </view>
   <van-button type='info' size="large" bindtap="submit">提交</van-button>
-  <view style="width:350px;"></view>
+  <view wx:if="{{focus}}" style="height:250px;opacity:0;"></view>
 </van-popup>
